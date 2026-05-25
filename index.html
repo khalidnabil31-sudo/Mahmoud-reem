@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shahd & Marwan 💍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        :root {
+            --cream: #f7eedf;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --deep-red: #c41e3a;
+            --bg-dark: #15080f;
+            --bg-mid: #2a0d1c;
+            --env-body: #f0e0c5;
+            --env-flap: #e0ccab;
+            --env-shadow: rgba(0,0,0,0.5);
+        }
+
+        body {
+            background: var(--bg-dark);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        /* ===== STARS ===== */
+        #stars-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== ENVELOPE SCREEN ===== */
+        #envelope-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, #3a0d24 0%, var(--bg-dark) 75%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease 0.9s;
+        }
+
+        #envelope-screen.away {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hint {
+            font-family: 'Cormorant Garamond', serif;
+            color: rgba(201,168,76,0.6);
+            font-size: 0.82rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 2.8rem;
+            animation: breathe 2.8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%,100% { opacity: 0.35; transform: translateY(0); }
+            50%      { opacity: 0.9;  transform: translateY(-5px); }
+        }
+
+        /* ===== ENVELOPE ===== */
+        .env-wrapper {
+            position: relative;
+            width: 420px;
+            height: 280px;
+            cursor: pointer;
+            perspective: 1300px;
+            user-select: none;
+        }
+
+        /* main envelope rectangle */
+        .env-body {
+            position: absolute;
+            inset: 0;
+            background: var(--env-body);
+            border-radius: 4px;
+            box-shadow:
+                0 30px 70px var(--env-shadow),
+                0 0 0 1px rgba(201,168,76,0.22),
+                inset 0 1px 0 rgba(255,255,255,0.45);
+            z-index: 1;
+        }
+
+        /* fold-line decoration (the X inside) */
+        .env-body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 4px;
+            background:
+                linear-gradient(135deg, transparent calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+                linear-gradient(225deg, transparent calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% + 0.6px), transparent calc(50% + 0.6px));
+            pointer-events: none;
+        }
+
+        /* letter peeking inside */
+        .letter-inner {
+            position: absolute;
+            bottom: 8px;
+            left: 18px;
+            right: 18px;
+            height: 68%;
+            background: linear-gradient(155deg, #fffbf5 0%, #fff5ea 100%);
+            border-radius: 2px;
+            z-index: 3;
+            transition: transform 1.05s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-inner::before {
+            content: '💍';
+            font-size: 2rem;
+            opacity: 0.35;
+        }
+
+        .env-wrapper.opening .letter-inner {
+            transform: translateY(-115px);
+        }
+
+        /* top flap — downward-pointing triangle */
+        .env-flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 56%;
+            background: var(--env-flap);
+            clip-path: polygon(0 0, 100% 0, 50% 92%);
+            transform-origin: top center;
+            transform-style: preserve-3d;
+            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.12s;
+            z-index: 10;
+        }
+
+        /* subtle gold border on flap */
+        .env-flap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(201,168,76,0.18) 0%, transparent 60%);
+            clip-path: polygon(0 0, 100% 0, 50% 92%);
+        }
+
+        .env-wrapper.opening .env-flap {
+            transform: rotateX(-172deg);
+        }
+
+        /* ===== WAX SEAL ===== */
+        .wax-seal {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75px; height: 75px;
+            z-index: 20;
+        }
+
+        .seal-disc {
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 37% 30%, #e8304a 0%, #c41e3a 42%, #861020 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 5px 20px rgba(139,0,0,0.55),
+                0 2px 5px rgba(0,0,0,0.35),
+                inset 0 2px 8px rgba(255,120,120,0.25),
+                inset 0 -2px 8px rgba(0,0,0,0.25);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .seal-disc::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .seal-disc::after {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .seal-disc:hover { transform: scale(1.06); }
+
+        .seal-label {
+            font-family: 'Playfair Display', serif;
+            color: rgba(255,240,220,0.95);
+            font-size: 0.64rem;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.45;
+            position: relative;
+            z-index: 1;
+        }
+
+        .env-wrapper.opening .wax-seal {
+            animation: crackSeal 0.5s ease forwards;
+        }
+
+        @keyframes crackSeal {
+            0%   { transform: translate(-50%,-50%) scale(1)    rotate(0deg);  opacity: 1; }
+            25%  { transform: translate(-50%,-50%) scale(1.18) rotate(9deg);  }
+            55%  { transform: translate(-50%,-50%) scale(0.8)  rotate(-6deg); opacity: 0.7; }
+            85%  { transform: translate(-50%,-50%) scale(0.4)  rotate(15deg); opacity: 0.2; }
+            100% { transform: translate(-50%,-50%) scale(0)    rotate(22deg); opacity: 0; }
+        }
+
+        /* ===== CONFETTI ===== */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            top: -20px;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            to { transform: translateY(110vh) rotate(760deg); opacity: 0; }
+        }
+
+        /* ===== INVITATION PAGE ===== */
+        #invite-page {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 35%, var(--bg-dark) 100%);
+            opacity: 0;
+            transition: opacity 1.3s ease 0.5s;
+        }
+
+        #invite-page.visible { opacity: 1; }
+
+        .invite-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 6rem 2rem 5rem;
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .reveal.shown { opacity: 1; transform: translateY(0); }
+
+        /* ===== ORNAMENT DIVIDER ===== */
+        .ornament {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 2.5rem 0;
+        }
+        .ornament-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(201,168,76,0.35), transparent);
+        }
+        .ornament-dot { color: var(--gold); font-size: 0.65rem; opacity: 0.65; }
+
+        /* ===== HERO ===== */
+        .eyebrow {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        .hero-names {
+            font-family: 'Dancing Script', cursive;
+            color: var(--cream);
+            font-size: clamp(3.8rem, 12vw, 5.8rem);
+            line-height: 1.0;
+            text-align: center;
+            text-shadow: 0 0 60px rgba(201,168,76,0.18);
+        }
+
+        .and-word {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1.9rem;
+            display: block;
+            margin: 0.1rem 0;
+        }
+
+        .ring-float {
+            font-size: 3rem;
+            display: block;
+            text-align: center;
+            margin: 1.3rem 0;
+            animation: floatRing 4s ease-in-out infinite;
+        }
+
+        @keyframes floatRing {
+            0%,100% { transform: translateY(0)   rotate(-4deg); }
+            50%      { transform: translateY(-12px) rotate(4deg); }
+        }
+
+        .hero-sub {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            color: rgba(247,238,223,0.45);
+            font-size: 0.95rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-top: 0.8rem;
+        }
+
+        /* ===== STORY CARD ===== */
+        .story-card {
+            position: relative;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(201,168,76,0.13);
+            border-radius: 10px;
+            padding: 2.5rem 2.8rem 2.5rem 3.2rem;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '\201C';
+            position: absolute;
+            top: -35px; left: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 11rem;
+            color: rgba(201,168,76,0.06);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .story-text {
+            font-family: 'Cormorant Garamond', serif;
+            color: rgba(247,238,223,0.82);
+            font-size: 1.2rem;
+            line-height: 2.05;
+            font-style: italic;
+        }
+
+        .story-text strong {
+            color: var(--gold-light);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* ===== DETAILS ===== */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.65rem;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 1.6rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .detail-item {
+            background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.02));
+            border: 1px solid rgba(201,168,76,0.18);
+            border-radius: 8px;
+            padding: 1.4rem 1.7rem;
+        }
+
+        .detail-label {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.45rem;
+        }
+
+        .detail-value {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.12rem;
+        }
+
+        /* ===== RSVP ===== */
+        .rsvp-card {
+            background: linear-gradient(135deg, rgba(196,30,58,0.07), rgba(139,0,0,0.04));
+            border: 1px solid rgba(196,30,58,0.22);
+            border-radius: 10px;
+            padding: 2.8rem;
+            text-align: center;
+        }
+
+        .rsvp-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .rsvp-note {
+            font-family: 'Cormorant Garamond', serif;
+            color: rgba(247,238,223,0.62);
+            font-size: 1.1rem;
+            font-style: italic;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .rsvp-note strong {
+            color: rgba(247,238,223,0.88);
+            font-style: normal;
+        }
+
+        .btn-rsvp {
+            display: inline-block;
+            padding: 0.9rem 3.2rem;
+            background: linear-gradient(135deg, #c9a84c, #a8813a);
+            color: var(--bg-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-rsvp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(201,168,76,0.28);
+        }
+
+        .btn-rsvp.clicked {
+            background: linear-gradient(135deg, #e8304a, #8b0000);
+            color: white;
+            cursor: default;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-sig {
+            font-family: 'Dancing Script', cursive;
+            color: rgba(201,168,76,0.38);
+            font-size: 1.25rem;
+            text-align: center;
+            padding: 1.5rem 0 4rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 540px) {
+            .env-wrapper   { width: 320px; height: 218px; }
+            .wax-seal      { width: 60px; height: 60px; }
+            .details-grid  { grid-template-columns: 1fr; }
+            .story-card    { padding: 1.8rem 1.5rem; }
+            .rsvp-card     { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="stars-canvas"></canvas>
+
+    <!-- ============ ENVELOPE SCREEN ============ -->
+    <div id="envelope-screen">
+        <p class="hint">✦ &nbsp; tap to open &nbsp; ✦</p>
+
+        <div class="env-wrapper" id="envelope" onclick="openEnvelope()">
+            <div class="env-body"></div>
+            <div class="letter-inner"></div>
+            <div class="env-flap"></div>
+            <div class="wax-seal" id="waxSeal">
+                <div class="seal-disc">
+                    <div class="seal-label">S<br>&amp;<br>M</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ INVITATION PAGE ============ -->
+    <div id="invite-page">
+        <div class="invite-inner">
+
+            <!-- HERO -->
+            <div class="reveal" id="r1" style="text-align:center;">
+                <p class="eyebrow">You are warmly invited to celebrate</p>
+                <div class="ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot">◆</div>
+                    <div class="ornament-line"></div>
+                </div>
+                <div class="hero-names">
+                    Shahd
+                    <span class="and-word">&amp;</span>
+                    Marwan
+                </div>
+                <span class="ring-float">💍</span>
+                <p class="hero-sub">Engagement Celebration</p>
+            </div>
+
+            <!-- STORY -->
+            <div class="reveal" id="r2">
+                <div class="ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot">◆</div>
+                    <div class="ornament-line"></div>
+                </div>
+                <div class="story-card">
+                    <p class="story-text">
+                        After <strong>years of very heated restaurant debates</strong>
+                        (he wants Koshary, she wants sushi — they always ended up eating both),
+                        countless <strong>"I'm fine"</strong> moments that were very clearly
+                        <em>not fine</em>, and at least <strong>three dramatic exits</strong>
+                        that lasted approximately twenty minutes each...
+                        <br><br>
+                        They have finally decided to make it <strong>official</strong> —
+                        because apparently, <strong>arguing together forever</strong>
+                        sounded much better than arguing alone.
+                        <br><br>
+                        <strong>Marwan</strong> got down on one knee.
+                        <strong>Shahd</strong> said yes — after making him wait
+                        <strong>exactly 4 minutes</strong> for full dramatic effect.
+                        The ring is beautiful. The tears were real.
+                        The Koshary was celebratory. 🎉
+                    </p>
+                </div>
+            </div>
+
+            <!-- DETAILS -->
+            <div class="reveal" id="r3">
+                <div class="ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot">◆</div>
+                    <div class="ornament-line"></div>
+                </div>
+                <p class="section-title">The Details</p>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <p class="detail-label">📅 Date</p>
+                        <p class="detail-value">Coming Soon</p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">📍 Venue</p>
+                        <p class="detail-value">To Be Announced</p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">👔 Dress Code</p>
+                        <p class="detail-value">Actually Fancy</p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">🍽 Catering</p>
+                        <p class="detail-value">No Koshary (probably)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSVP -->
+            <div class="reveal" id="r4">
+                <div class="ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot">◆</div>
+                    <div class="ornament-line"></div>
+                </div>
+                <div class="rsvp-card">
+                    <p class="rsvp-title">Will You Join Us? 🥂</p>
+                    <p class="rsvp-note">
+                        Your presence would make this evening truly magical.<br>
+                        Your absence, however, will be <strong>noted, discussed at length, and brought up
+                        at every family gathering for the next decade.</strong>
+                        <br><br>
+                        No pressure at all. Totally your call. We're watching. 👀
+                    </p>
+                    <button class="btn-rsvp" id="rsvpBtn" onclick="handleRSVP(this)">
+                        I'll Be There &nbsp;✦
+                    </button>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="reveal" id="r5">
+                <div class="ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot">◆</div>
+                    <div class="ornament-line"></div>
+                </div>
+                <p class="footer-sig">With all our love — Shahd &amp; Marwan 💍</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    /* ---- TWINKLING STARS ---- */
+    const canvas = document.getElementById('stars-canvas');
+    const ctx    = canvas.getContext('2d');
+    let stars    = [];
+
+    function initStars() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        stars = Array.from({length: 160}, () => ({
+            x:      Math.random() * canvas.width,
+            y:      Math.random() * canvas.height,
+            r:      Math.random() * 1.4 + 0.3,
+            base:   Math.random() * 0.55 + 0.08,
+            speed:  Math.random() * 0.009 + 0.003,
+            offset: Math.random() * Math.PI * 2
+        }));
+    }
+
+    (function animate(t) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            const a = s.base * (0.5 + 0.5 * Math.sin(t * s.speed + s.offset));
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${a})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    })(0);
+
+    window.addEventListener('resize', initStars);
+    initStars();
+
+    /* ---- ENVELOPE OPEN ---- */
+    let opened = false;
+
+    function openEnvelope() {
+        if (opened) return;
+        opened = true;
+
+        document.getElementById('envelope').classList.add('opening');
+
+        setTimeout(launchConfetti, 420);
+
+        setTimeout(() => {
+            document.getElementById('envelope-screen').classList.add('away');
+            const page = document.getElementById('invite-page');
+            page.classList.add('visible');
+            setupReveal();
+            setTimeout(() => document.getElementById('r1').classList.add('shown'), 550);
+        }, 1600);
+    }
+
+    /* ---- CONFETTI ---- */
+    function launchConfetti() {
+        const colors = ['#c9a84c','#e8c97a','#c41e3a','#f7eedf','#ffffff','#e8304a','#f0c060'];
+        for (let i = 0; i < 80; i++) {
+            setTimeout(() => {
+                const el  = document.createElement('div');
+                const big = Math.random() > 0.5;
+                el.className = 'confetti-piece';
+                el.style.cssText = `
+                    left:${Math.random()*100}vw;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    border-radius:${big ? '50%' : '2px'};
+                    width:${Math.random()*7+5}px;
+                    height:${Math.random()*7+5}px;
+                    animation-duration:${Math.random()*1.6+1.8}s;
+                    transform:rotate(${Math.random()*360}deg);
+                `;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 3800);
+            }, i * 28 + Math.random() * 180);
+        }
+    }
+
+    /* ---- SCROLL REVEAL ---- */
+    function setupReveal() {
+        const io = new IntersectionObserver(
+            entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('shown'); }),
+            { threshold: 0.12 }
+        );
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    }
+
+    /* ---- RSVP BUTTON ---- */
+    function handleRSVP(btn) {
+        if (btn.classList.contains('clicked')) return;
+        btn.textContent = '🎉 See You There!';
+        btn.classList.add('clicked');
+        btn.disabled = true;
+    }
+    </script>
+</body>
+</html>
