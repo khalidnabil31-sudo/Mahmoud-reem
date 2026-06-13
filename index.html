@@ -5,680 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shahd & Marwan 💍</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        :root { --cream: #f7eedf; --gold: #c9a84c; --gold-light: #e8c97a; --deep-red: #c41e3a; --bg-dark: #15080f; --bg-mid: #2a0d1c; --env-body: #f0e0c5; --env-flap: #e0ccab; --env-shadow: rgba(0,0,0,0.5); }
+        body { background: var(--bg-dark); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; }
+        #stars-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        
+        #vinyl-wrapper { position: fixed; top: 18px; right: 18px; z-index: 600; opacity: 0; transform: scale(0.5) rotate(-20deg); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.4,0.64,1); cursor: pointer; }
+        #vinyl-wrapper.visible { opacity: 1; transform: scale(1) rotate(0deg); }
+        .vinyl-disc { width: 78px; height: 78px; border-radius: 50%; background: radial-gradient(circle, #c9a84c 0%, #a87c2a 8%, #7a5c1a 10%, #0f0f0f 11%, #1e1e1e 15%, #0f0f0f 16%, #1e1e1e 22%, #0f0f0f 23%, #1e1e1e 30%, #0f0f0f 31%, #1e1e1e 39%, #0f0f0f 40%, #1e1e1e 50%, #0f0f0f 51%, #1e1e1e 62%, #0f0f0f 63%, #1e1e1e 76%, #0f0f0f 77%, #0a0a0a 100%); box-shadow: 0 6px 28px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04), inset 0 2px 4px rgba(255,255,255,0.04); animation: vinylSpin 2.2s linear infinite; animation-play-state: paused; position: relative; transition: box-shadow 0.3s ease; }
+        .vinyl-disc:hover { box-shadow: 0 8px 35px rgba(201,168,76,0.35), 0 0 0 1px rgba(201,168,76,0.2); }
+        .vinyl-disc.spinning { animation-play-state: running; }
+        @keyframes vinylSpin { to { transform: rotate(360deg); } }
+        .vinyl-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #e8c97a, #c9a84c 50%, #8b6014); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
+        .vinyl-label span { font-family: 'Playfair Display', serif; font-size: 5.5px; color: rgba(255,255,240,0.9); font-weight: 700; letter-spacing: 0.3px; line-height: 1.2; text-align: center; }
+        .vinyl-needle { position: absolute; top: 2px; right: -14px; width: 34px; height: 2.5px; background: linear-gradient(to left, #888, #ddd, #aaa); transform-origin: right center; transform: rotate(20deg); border-radius: 2px; transition: transform 0.6s ease; }
+        .vinyl-needle::before { content: ''; position: absolute; right: -1px; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #ccc, #888); }
+        .vinyl-needle::after { content: ''; position: absolute; left: 0; top: -1px; width: 5px; height: 4px; background: #c0a020; border-radius: 1px; }
+        #vinyl-wrapper:not(.playing) .vinyl-needle { transform: rotate(0deg); }
+        .vinyl-icon { text-align: center; font-size: 0.6rem; color: rgba(201,168,76,0.6); letter-spacing: 1px; margin-top: 5px; font-family: 'Cormorant Garamond', serif; }
 
-        :root {
-            --cream: #f7eedf;
-            --gold: #c9a84c;
-            --gold-light: #e8c97a;
-            --deep-red: #c41e3a;
-            --bg-dark: #15080f;
-            --bg-mid: #2a0d1c;
-            --env-body: #f0e0c5;
-            --env-flap: #e0ccab;
-            --env-shadow: rgba(0,0,0,0.5);
-        }
+        #envelope-screen { position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 40%, #3a0d24 0%, var(--bg-dark) 75%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500; transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease 0.9s; }
+        #envelope-screen.away { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+        .hint { font-family: 'Cormorant Garamond', serif; color: rgba(201,168,76,0.6); font-size: 0.82rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 2.8rem; animation: breathe 2.8s ease-in-out infinite; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        @keyframes breathe { 0%,100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 0.9; transform: translateY(-5px); } }
 
-        body {
-            background: var(--bg-dark);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
-        }
+        .env-wrapper { position: relative; width: 420px; height: 280px; cursor: pointer; perspective: 1300px; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .env-body { position: absolute; inset: 0; background: var(--env-body); border-radius: 4px; box-shadow: 0 30px 70px var(--env-shadow), 0 0 0 1px rgba(201,168,76,0.22), inset 0 1px 0 rgba(255,255,255,0.45); z-index: 1; }
+        .letter-inner { position: absolute; bottom: 8px; left: 18px; right: 18px; height: 68%; background: linear-gradient(155deg, #fffbf5 0%, #fff5ea 100%); border-radius: 2px; z-index: 3; transition: transform 1.05s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s; box-shadow: 0 2px 14px rgba(0,0,0,0.13); display: flex; align-items: center; justify-content: center; }
+        .letter-inner::before { content: '💍'; font-size: 2rem; opacity: 0.35; }
+        .env-wrapper.opening .letter-inner { transform: translateY(-115px); }
+        .env-flap { position: absolute; top: 0; left: 0; width: 100%; height: 56%; background: var(--env-flap); clip-path: polygon(0 0, 100% 0, 50% 92%); transform-origin: top center; transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.12s; z-index: 10; }
+        .env-wrapper.opening .env-flap { transform: rotateX(-172deg); }
 
-        /* ===== STARS ===== */
-        #stars-canvas {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== VINYL RECORD ===== */
-        #vinyl-wrapper {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 600;
-            opacity: 0;
-            transform: scale(0.5) rotate(-20deg);
-            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.4,0.64,1);
-            cursor: pointer;
-        }
-
-        #vinyl-wrapper.visible {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-
-        .vinyl-disc {
-            width: 78px;
-            height: 78px;
-            border-radius: 50%;
-            background: radial-gradient(circle,
-                #c9a84c 0%, #a87c2a 8%, #7a5c1a 10%,
-                #0f0f0f 11%, #1e1e1e 15%, #0f0f0f 16%,
-                #1e1e1e 22%, #0f0f0f 23%, #1e1e1e 30%,
-                #0f0f0f 31%, #1e1e1e 39%, #0f0f0f 40%,
-                #1e1e1e 50%, #0f0f0f 51%, #1e1e1e 62%,
-                #0f0f0f 63%, #1e1e1e 76%, #0f0f0f 77%,
-                #0a0a0a 100%
-            );
-            box-shadow:
-                0 6px 28px rgba(0,0,0,0.65),
-                0 0 0 1px rgba(255,255,255,0.04),
-                inset 0 2px 4px rgba(255,255,255,0.04);
-            animation: vinylSpin 2.2s linear infinite;
-            animation-play-state: paused;
-            position: relative;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .vinyl-disc:hover {
-            box-shadow: 0 8px 35px rgba(201,168,76,0.35), 0 0 0 1px rgba(201,168,76,0.2);
-        }
-
-        .vinyl-disc.spinning {
-            animation-play-state: running;
-        }
-
-        @keyframes vinylSpin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* center label */
-        .vinyl-label {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 38% 32%, #e8c97a, #c9a84c 50%, #8b6014);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        .vinyl-label span {
-            font-family: 'Playfair Display', serif;
-            font-size: 5.5px;
-            color: rgba(255,255,240,0.9);
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            line-height: 1.2;
-            text-align: center;
-        }
-
-        /* needle arm */
-        .vinyl-needle {
-            position: absolute;
-            top: 2px;
-            right: -14px;
-            width: 34px;
-            height: 2.5px;
-            background: linear-gradient(to left, #888, #ddd, #aaa);
-            transform-origin: right center;
-            transform: rotate(20deg);
-            border-radius: 2px;
-            transition: transform 0.6s ease;
-        }
-
-        .vinyl-needle::before {
-            content: '';
-            position: absolute;
-            right: -1px; top: -5px;
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, #ccc, #888);
-        }
-
-        .vinyl-needle::after {
-            content: '';
-            position: absolute;
-            left: 0; top: -1px;
-            width: 5px; height: 4px;
-            background: #c0a020;
-            border-radius: 1px;
-        }
-
-        #vinyl-wrapper:not(.playing) .vinyl-needle {
-            transform: rotate(0deg);
-        }
-
-        /* play/pause icon below disc */
-        .vinyl-icon {
-            text-align: center;
-            font-size: 0.6rem;
-            color: rgba(201,168,76,0.6);
-            letter-spacing: 1px;
-            margin-top: 5px;
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        /* pulse ring when waiting for tap */
-        #vinyl-wrapper.pulse-me .vinyl-disc::after {
-            content: '';
-            position: absolute;
-            inset: -6px;
-            border-radius: 50%;
-            border: 2px solid rgba(201,168,76,0.55);
-            animation: pulseRing 1.3s ease-out infinite;
-        }
-        @keyframes pulseRing {
-            0%   { transform: scale(1);   opacity: 0.9; }
-            100% { transform: scale(1.6); opacity: 0; }
-        }
-
-        /* ===== ENVELOPE SCREEN ===== */
-        #envelope-screen {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 40%, #3a0d24 0%, var(--bg-dark) 75%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease 0.9s;
-        }
-
-        #envelope-screen.away {
-            transform: translateY(-100%);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .hint {
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(201,168,76,0.6);
-            font-size: 0.82rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 2.8rem;
-            animation: breathe 2.8s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%,100% { opacity: 0.35; transform: translateY(0); }
-            50%      { opacity: 0.9;  transform: translateY(-5px); }
-        }
-
-        /* ===== ENVELOPE ===== */
-        .env-wrapper {
-            position: relative;
-            width: 420px;
-            height: 280px;
-            cursor: pointer;
-            perspective: 1300px;
-            user-select: none;
-        }
-
-        .env-body {
-            position: absolute;
-            inset: 0;
-            background: var(--env-body);
-            border-radius: 4px;
-            box-shadow:
-                0 30px 70px var(--env-shadow),
-                0 0 0 1px rgba(201,168,76,0.22),
-                inset 0 1px 0 rgba(255,255,255,0.45);
-            z-index: 1;
-        }
-
-        .env-body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 4px;
-            background:
-                linear-gradient(135deg, transparent calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
-                linear-gradient(225deg, transparent calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% - 0.6px), rgba(0,0,0,0.06) calc(50% + 0.6px), transparent calc(50% + 0.6px));
-            pointer-events: none;
-        }
-
-        .letter-inner {
-            position: absolute;
-            bottom: 8px;
-            left: 18px; right: 18px;
-            height: 68%;
-            background: linear-gradient(155deg, #fffbf5 0%, #fff5ea 100%);
-            border-radius: 2px;
-            z-index: 3;
-            transition: transform 1.05s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s;
-            box-shadow: 0 2px 14px rgba(0,0,0,0.13);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .letter-inner::before {
-            content: '💍';
-            font-size: 2rem;
-            opacity: 0.35;
-        }
-
-        .env-wrapper.opening .letter-inner {
-            transform: translateY(-115px);
-        }
-
-        .env-flap {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 56%;
-            background: var(--env-flap);
-            clip-path: polygon(0 0, 100% 0, 50% 92%);
-            transform-origin: top center;
-            transform-style: preserve-3d;
-            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.12s;
-            z-index: 10;
-        }
-
-        .env-flap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(201,168,76,0.18) 0%, transparent 60%);
-            clip-path: polygon(0 0, 100% 0, 50% 92%);
-        }
-
-        .env-wrapper.opening .env-flap {
-            transform: rotateX(-172deg);
-        }
-
-        /* ===== WAX SEAL ===== */
-        .wax-seal {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 75px; height: 75px;
-            z-index: 20;
-        }
-
-        .seal-disc {
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 37% 30%, #e8304a 0%, #c41e3a 42%, #861020 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                0 5px 20px rgba(139,0,0,0.55),
-                0 2px 5px rgba(0,0,0,0.35),
-                inset 0 2px 8px rgba(255,120,120,0.25),
-                inset 0 -2px 8px rgba(0,0,0,0.25);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .seal-disc::before {
-            content: '';
-            position: absolute;
-            inset: 5px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.18);
-        }
-
-        .seal-disc::after {
-            content: '';
-            position: absolute;
-            inset: 10px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
+        .wax-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75px; height: 75px; z-index: 20; }
+        .seal-disc { width: 100%; height: 100%; background: radial-gradient(circle at 37% 30%, #e8304a 0%, #c41e3a 42%, #861020 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(139,0,0,0.55), 0 2px 5px rgba(0,0,0,0.35), inset 0 2px 8px rgba(255,120,120,0.25), inset 0 -2px 8px rgba(0,0,0,0.25); position: relative; transition: transform 0.3s ease; }
+        .seal-disc::before { content: ''; position: absolute; inset: 5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.18); }
+        .seal-disc::after { content: ''; position: absolute; inset: 10px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
         .seal-disc:hover { transform: scale(1.06); }
+        .seal-label { font-family: 'Playfair Display', serif; color: rgba(255,240,220,0.95); font-size: 0.64rem; letter-spacing: 0.5px; text-align: center; line-height: 1.45; position: relative; z-index: 1; }
+        .env-wrapper.opening .wax-seal { animation: crackSeal 0.5s ease forwards; }
+        @keyframes crackSeal { 0% { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; } 25% { transform: translate(-50%,-50%) scale(1.18) rotate(9deg); } 55% { transform: translate(-50%,-50%) scale(0.8) rotate(-6deg); opacity: 0.7; } 85% { transform: translate(-50%,-50%) scale(0.4) rotate(15deg); opacity: 0.2; } 100% { transform: translate(-50%,-50%) scale(0) rotate(22deg); opacity: 0; } }
 
-        .seal-label {
-            font-family: 'Playfair Display', serif;
-            color: rgba(255,240,220,0.95);
-            font-size: 0.64rem;
-            letter-spacing: 0.5px;
-            text-align: center;
-            line-height: 1.45;
-            position: relative;
-            z-index: 1;
-        }
+        .confetti-piece { position: fixed; pointer-events: none; z-index: 9999; top: -20px; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { to { transform: translateY(110vh) rotate(760deg); opacity: 0; } }
 
-        .env-wrapper.opening .wax-seal {
-            animation: crackSeal 0.5s ease forwards;
-        }
-
-        @keyframes crackSeal {
-            0%   { transform: translate(-50%,-50%) scale(1)    rotate(0deg);  opacity: 1; }
-            25%  { transform: translate(-50%,-50%) scale(1.18) rotate(9deg);  }
-            55%  { transform: translate(-50%,-50%) scale(0.8)  rotate(-6deg); opacity: 0.7; }
-            85%  { transform: translate(-50%,-50%) scale(0.4)  rotate(15deg); opacity: 0.2; }
-            100% { transform: translate(-50%,-50%) scale(0)    rotate(22deg); opacity: 0; }
-        }
-
-        /* ===== CONFETTI ===== */
-        .confetti-piece {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            top: -20px;
-            animation: confettiFall linear forwards;
-        }
-
-        @keyframes confettiFall {
-            to { transform: translateY(110vh) rotate(760deg); opacity: 0; }
-        }
-
-        /* ===== INVITATION PAGE ===== */
-        #invite-page {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 35%, var(--bg-dark) 100%);
-            opacity: 0;
-            transition: opacity 1.3s ease 0.5s;
-        }
-
+        #invite-page { position: relative; z-index: 1; min-height: 100vh; background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 35%, var(--bg-dark) 100%); opacity: 0; transition: opacity 1.3s ease 0.5s; }
         #invite-page.visible { opacity: 1; }
-
-        .invite-inner {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 6rem 2rem 5rem;
-        }
-
-        /* ===== REVEAL ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s ease, transform 1s ease;
-        }
+        .invite-inner { max-width: 700px; margin: 0 auto; padding: 6rem 2rem 5rem; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
         .reveal.shown { opacity: 1; transform: translateY(0); }
-
-        /* ===== ORNAMENT ===== */
-        .ornament {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin: 2.5rem 0;
-        }
-        .ornament-line {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, transparent, rgba(201,168,76,0.35), transparent);
-        }
+        .ornament { display: flex; align-items: center; gap: 16px; margin: 2.5rem 0; }
+        .ornament-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,76,0.35), transparent); }
         .ornament-dot { color: var(--gold); font-size: 0.65rem; opacity: 0.65; }
-
-        /* ===== HERO ===== */
-        .eyebrow {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold);
-            font-size: 0.78rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            font-weight: 300;
-            text-align: center;
-        }
-
-        .hero-names {
-            font-family: 'Dancing Script', cursive;
-            color: var(--cream);
-            font-size: clamp(3.8rem, 12vw, 5.8rem);
-            line-height: 1.0;
-            text-align: center;
-            text-shadow: 0 0 60px rgba(201,168,76,0.18);
-        }
-
-        .and-word {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--gold);
-            font-size: 1.9rem;
-            display: block;
-            margin: 0.1rem 0;
-        }
-
-        .ring-float {
-            font-size: 3rem;
-            display: block;
-            text-align: center;
-            margin: 1.3rem 0;
-            animation: floatRing 4s ease-in-out infinite;
-        }
-
-        @keyframes floatRing {
-            0%,100% { transform: translateY(0)    rotate(-4deg); }
-            50%      { transform: translateY(-12px) rotate(4deg); }
-        }
-
-        .hero-sub {
-            text-align: center;
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(247,238,223,0.45);
-            font-size: 0.95rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-top: 0.8rem;
-        }
-
-        /* ===== STORY ===== */
-        .story-card {
-            position: relative;
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(201,168,76,0.13);
-            border-radius: 10px;
-            padding: 2.5rem 2.8rem 2.5rem 3.2rem;
-            overflow: hidden;
-        }
-
-        .story-card::before {
-            content: '\201C';
-            position: absolute;
-            top: -35px; left: 8px;
-            font-family: 'Playfair Display', serif;
-            font-size: 11rem;
-            color: rgba(201,168,76,0.06);
-            line-height: 1;
-            pointer-events: none;
-        }
-
-        .story-text {
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(247,238,223,0.82);
-            font-size: 1.2rem;
-            line-height: 2.05;
-            font-style: italic;
-        }
-
-        .story-text strong {
-            color: var(--gold-light);
-            font-style: normal;
-            font-weight: 600;
-        }
-
-        /* ===== DETAILS ===== */
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--cream);
-            font-size: 1.65rem;
-            font-weight: 400;
-            text-align: center;
-            margin-bottom: 1.6rem;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .detail-item {
-            background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.02));
-            border: 1px solid rgba(201,168,76,0.18);
-            border-radius: 8px;
-            padding: 1.4rem 1.7rem;
-        }
-
-        .detail-label {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold);
-            font-size: 0.72rem;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            margin-bottom: 0.45rem;
-        }
-
-        .detail-value {
-            font-family: 'Playfair Display', serif;
-            color: var(--cream);
-            font-size: 1.12rem;
-        }
-
-        /* ===== RSVP ===== */
-        .rsvp-card {
-            background: linear-gradient(135deg, rgba(196,30,58,0.07), rgba(139,0,0,0.04));
-            border: 1px solid rgba(196,30,58,0.22);
-            border-radius: 10px;
-            padding: 2.8rem;
-            text-align: center;
-        }
-
-        .rsvp-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--cream);
-            font-size: 1.75rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-        }
-
-        .rsvp-note {
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(247,238,223,0.62);
-            font-size: 1.1rem;
-            font-style: italic;
-            line-height: 1.9;
-            margin-bottom: 2rem;
-        }
-
-        .rsvp-note strong {
-            color: rgba(247,238,223,0.88);
-            font-style: normal;
-        }
-
-        .btn-rsvp {
-            display: inline-block;
-            padding: 0.9rem 3.2rem;
-            background: linear-gradient(135deg, #c9a84c, #a8813a);
-            color: var(--bg-dark);
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .btn-rsvp:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(201,168,76,0.28);
-        }
-
-        .btn-rsvp.clicked {
-            background: linear-gradient(135deg, #e8304a, #8b0000);
-            color: white;
-            cursor: default;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer-sig {
-            font-family: 'Dancing Script', cursive;
-            color: rgba(201,168,76,0.38);
-            font-size: 1.25rem;
-            text-align: center;
-            padding: 1.5rem 0 4rem;
-        }
-
-        /* ===== RESPONSIVE ===== */
+        .eyebrow { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.78rem; letter-spacing: 5px; text-transform: uppercase; font-weight: 300; text-align: center; }
+        .hero-names { font-family: 'Dancing Script', cursive; color: var(--cream); font-size: clamp(3.8rem, 12vw, 5.8rem); line-height: 1.0; text-align: center; text-shadow: 0 0 60px rgba(201,168,76,0.18); }
+        .and-word { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.9rem; display: block; margin: 0.1rem 0; }
+        .ring-float { font-size: 3rem; display: block; text-align: center; margin: 1.3rem 0; animation: floatRing 4s ease-in-out infinite; }
+        @keyframes floatRing { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
+        .hero-sub { text-align: center; font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.45); font-size: 0.95rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 0.8rem; }
+        .story-card { position: relative; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,168,76,0.13); border-radius: 10px; padding: 2.5rem 2.8rem; overflow: hidden; }
+        .story-card::before { content: '\201C'; position: absolute; top: -35px; left: 8px; font-family: 'Playfair Display', serif; font-size: 11rem; color: rgba(201,168,76,0.06); line-height: 1; pointer-events: none; }
+        .story-text { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.82); font-size: 1.2rem; line-height: 2.05; font-style: italic; }
+        .story-text strong { color: var(--gold-light); font-style: normal; font-weight: 600; }
+        .section-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.65rem; font-weight: 400; text-align: center; margin-bottom: 1.6rem; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .detail-item { background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.02)); border: 1px solid rgba(201,168,76,0.18); border-radius: 8px; padding: 1.4rem 1.7rem; }
+        .detail-label { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.72rem; letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 0.45rem; }
+        .detail-value { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.12rem; }
+        .rsvp-card { background: linear-gradient(135deg, rgba(196,30,58,0.07), rgba(139,0,0,0.04)); border: 1px solid rgba(196,30,58,0.22); border-radius: 10px; padding: 2.8rem; text-align: center; }
+        .rsvp-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.75rem; font-weight: 400; margin-bottom: 1rem; }
+        .rsvp-note { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.62); font-size: 1.1rem; font-style: italic; line-height: 1.9; margin-bottom: 2rem; }
+        .rsvp-note strong { color: rgba(247,238,223,0.88); font-style: normal; }
+        .btn-rsvp { display: inline-block; padding: 0.9rem 3.2rem; background: linear-gradient(135deg, #c9orant+Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .btn-rsvp:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(201,168,76,0.28); }
+        .btn-rsvp.clicked { background: linear-gradient(135deg, #e8304a, #8b0000); color: white; cursor: default; }
+        .footer-sig { font-family: 'Dancing Script', cursive; color: rgba(201,168,76,0.38); font-size: 1.25rem; text-align: center; padding: 1.5rem 0 4rem; }
+        .romantic-box { text-align: center; padding: 1rem 0; }
+        .romantic-quote { font-family: 'Playfair Display', serif; font-style: italic; color: rgba(247,238,223,0.9); font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.85; font-weight: 400; }
+        .romantic-quote em { color: var(--gold-light); font-style: normal; }
+        .game-box { background: rgba(255,255,255,0.025); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 2.2rem; text-align: center; }
+        .game-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .game-subtitle { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.5); font-size: 0.95rem; font-style: italic; margin-bottom: 2rem; }
+        .game-start-btn, .play-again-btn { display: inline-block; padding: 0.8rem 2rem; background: linear-gradient(135deg, #c9a84c, #a8813a); color: #15080f; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .game-start-btn:hover, .play-again-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(201,168,76,0.28); }
+        
         @media (max-width: 540px) {
-            .env-wrapper   { width: 320px; height: 218px; }
-            .wax-seal      { width: 60px; height: 60px; }
-            .details-grid  { grid-template-columns: 1fr; }
-            .story-card    { padding: 1.8rem 1.5rem; }
-            .rsvp-card     { padding: 2rem 1.5rem; }
+            .env-wrapper { width: 320px; height: 218px; }
+            .wax-seal { width: 60px; height: 60px; }
+            .details-grid { grid-template-columns: 1fr; }
+            .story-card { padding: 1.8rem 1.5rem; }
+            .rsvp-card { padding: 2rem 1.5rem; }
             #vinyl-wrapper { top: 12px; right: 12px; }
-        }
-
-        /* ===== ROMANTIC SECTION ===== */
-        .romantic-box {
-            text-align: center;
-            padding: 1rem 0;
-        }
-
-        .romantic-quote {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: rgba(247,238,223,0.9);
-            font-size: clamp(1.2rem, 3vw, 1.55rem);
-            line-height: 1.85;
-            font-weight: 400;
-        }
-
-        .romantic-quote em {
-            color: var(--gold-light);
-            font-style: normal;
-        }
-
-        .romantic-small {
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(201,168,76,0.6);
-            font-size: 0.85rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 1.5rem;
-        }
-
-        /* ===== GAME ===== */
-        .game-box {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(201,168,76,0.15);
-            border-radius: 12px;
-            padding: 2.2rem;
-            text-align: center;
-        }
-
-        .game-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--cream);
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-        }
-
-        .game-subtitle {
-            font-family: 'Cormorant Garamond', serif;
-            color: rgba(247,238,223,0.5);
-            font-size: 0.95rem;
-            font-style: italic;
-            margin-bottom: 2rem;
-        }
-
-
-
-        @media (max-width: 480px) {
-            .q-options { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-
     <canvas id="stars-canvas"></canvas>
-
-    <!-- audio player -->
     <audio id="bgMusic" src="song.mp3" loop preload="auto"></audio>
 
-    <!-- ===== VINYL RECORD ===== -->
-    <div id="vinyl-wrapper" onclick="toggleMusic()" title="تشغيل / إيقاف">
+    <div id="vinyl-wrapper" onclick="toggleMusic()" title="Play / Pause">
         <div class="vinyl-disc" id="vinylDisc">
             <div class="vinyl-label"><span>S&amp;M</span></div>
         </div>
@@ -686,15 +115,13 @@
         <div class="vinyl-icon" id="vinylIcon">▶ play</div>
     </div>
 
-    <!-- ===== ENVELOPE SCREEN ===== -->
     <div id="envelope-screen">
         <p class="hint">✦ &nbsp; tap to open &nbsp; ✦</p>
-
         <div class="env-wrapper" id="envelope" onclick="openEnvelope()">
             <div class="env-body"></div>
             <div class="letter-inner"></div>
             <div class="env-flap"></div>
-            <div class="wax-seal" id="waxSeal">
+            <div class="wax-seal">
                 <div class="seal-disc">
                     <div class="seal-label">S<br>&amp;<br>M</div>
                 </div>
@@ -702,18 +129,12 @@
         </div>
     </div>
 
-    <!-- ===== INVITATION PAGE ===== -->
     <div id="invite-page">
         <div class="invite-inner">
-
             <div class="reveal" id="r1" style="text-align:center;">
                 <p class="eyebrow">You are warmly invited to celebrate</p>
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="hero-names">
-                    Shahd
-                    <span class="and-word">&amp;</span>
-                    Marwan
-                </div>
+                <div class="hero-names">Shahd <span class="and-word">&amp;</span> Marwan</div>
                 <span class="ring-float">💍</span>
                 <p class="hero-sub">Engagement Celebration</p>
             </div>
@@ -722,94 +143,63 @@
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="story-card">
                     <p class="story-text">
-                        After <strong>years of very heated restaurant debates</strong>
-                        (he wants Koshary, she wants sushi — they always ended up eating both),
-                        countless <strong>"I'm fine"</strong> moments that were very clearly
-                        <em>not fine</em>, and at least <strong>three dramatic exits</strong>
-                        that lasted approximately twenty minutes each...
+                        After <strong>years of very heated restaurant debates</strong> (he wants Koshary, she wants sushi — they always ended up eating both), countless <strong>"I'm fine"</strong> moments that were very clearly <em>not fine</em>, and at least <strong>three dramatic exits</strong> that lasted approximately twenty minutes each...
                         <br><br>
-                        They have finally decided to make it <strong>official</strong> —
-                        because apparently, <strong>arguing together forever</strong>
-                        sounded much better than arguing alone.
+                        They have finally decided to make it <strong>official</strong> — because apparently, <strong>arguing together forever</strong> sounded much better than arguing alone.
                         <br><br>
-                        <strong>Marwan</strong> got down on one knee.
-                        <strong>Shahd</strong> said yes — after making him wait
-                        <strong>exactly 4 minutes</strong> for full dramatic effect.
-                        The ring is beautiful. The tears were real.
-                        The Koshary was celebratory. 🎉
+                        <strong>Marwan</strong> got down on one knee. <strong>Shahd</strong> said yes — after making him wait <strong>exactly 4 minutes</strong> for full dramatic effect. The ring is beautiful. The tears were real. The Koshary was celebratory. 🎉
                     </p>
                 </div>
             </div>
 
-
-            <!-- ROMANTIC TEXT -->
             <div class="reveal" id="r2b">
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="romantic-box">
                     <p class="romantic-quote">
-                        It was a night like any other —<br>
-                        <em>until it wasn't.</em>
+                        It was a night like any other —<br><em>until it wasn't.</em>
                         <br><br>
-                        Two souls, each walking their own quiet road,<br>
-                        crossed paths under the same sky<br>
-                        at the exact moment they needed someone<br>
-                        <em>without knowing they were searching.</em>
+                        Two souls, each walking their own quiet road,<br>crossed paths under the same sky<br>at the exact moment they needed someone<br><em>without knowing they were searching.</em>
                         <br><br>
-                        The night kept their secret.<br>
-                        It watched as strangers became<br>
-                        the most familiar thing in the world to each other.
+                        The night kept their secret.<br>It watched as strangers became<br>the most familiar thing in the world to each other.
                         <br><br>
-                        <em>He was her calm in the chaos.<br>
-                        She was his reason to stay.</em>
+                        <em>He was her calm in the chaos.<br>She was his reason to stay.</em>
                         <br><br>
-                        And somewhere between the moonlight<br>
-                        and everything left unsaid —<br>
-                        they found home in each other. 🌙
-                    </p>
-                    <p style="font-family:'Cormorant Garamond';color:rgba(201,168,76,0.45);font-size:0.8rem;letter-spacing:4px;text-transform:uppercase;margin-top:2rem;">
-                        strangers in the night — no more
+                        And somewhere between the moonlight<br>and everything left unsaid —<br>they found home in each other. 🌙
                     </p>
                 </div>
             </div>
 
-            <!-- MAZE GAME -->
             <div class="reveal" id="r2c">
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="game-box">
-                    <p class="game-title">💘 ساعد مروان يوصل لشهد!</p>
-                    <p class="game-subtitle">في متاهة الحياة — إيه اللي يوقف مروان؟ لا حاجة 😤</p>
+                    <p class="game-title">💘 Help Marwan reach Shahd!</p>
+                    <p class="game-subtitle">Navigate through the maze of life</p>
                     <div id="mazeStart">
                         <div style="font-size:2.5rem;margin-bottom:1rem;">🧭</div>
-                        <p style="font-family:'Cormorant Garamond';color:rgba(247,238,223,0.6);font-style:italic;font-size:1rem;margin-bottom:1.5rem;">استخدم الأسهم أو اسحب على الموبايل</p>
-                        <button class="game-start-btn" onclick="initMaze()">ابدأ المتاهة ✦</button>
+                        <p style="font-family:'Cormorant Garamond';color:rgba(247,238,223,0.6);font-style:italic;font-size:1rem;margin-bottom:1.5rem;">Use arrow keys or swipe on mobile</p>
+                        <button class="game-start-btn" onclick="initMaze()">Start Maze ✦</button>
                     </div>
                     <div id="mazeArea" style="display:none;">
                         <canvas id="mazeCanvas" style="border-radius:8px;max-width:100%;display:block;margin:0 auto;cursor:default;"></canvas>
                         <p id="mazeMsg" style="font-family:'Cormorant Garamond';color:var(--gold-light);font-style:italic;font-size:1rem;margin-top:1rem;min-height:1.5rem;"></p>
-                        <button class="play-again-btn" id="mazeRetry" style="display:none;margin-top:0.8rem;" onclick="initMaze()">تاني يا مروان 🔄</button>
+                        <button class="play-again-btn" id="mazeRetry" style="display:none;margin-top:0.8rem;" onclick="initMaze()">Try Again 🔄</button>
                     </div>
                 </div>
             </div>
+
             <div class="reveal" id="r3">
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <p class="section-title">The Details</p>
                 <div class="details-grid">
-                    <div class="detail-item">
-                        <p class="detail-label">📅 Date</p>
-                        <p class="detail-value">Coming Soon</p>
-                    </div>
+                    <div class="detail-item"><p class="detail-label">📅 Date</p><p class="detail-value">Coming Soon</p></div>
                     <div class="detail-item">
                         <p class="detail-label">📍 Venue</p>
-                        <p class="detail-value">Izoya</p>
+                        <p class="detail-value">
+                            <a href="https://www.google.com/maps/place/izoya/data=!4m2!3m1!1s0x14f5c59d0169f90b:0x1c6c8de8dd709a5f?sa=X&ved=1t:242&ictx=111" target="_blank" style="color: var(--gold-light); text-decoration: none;">Izoya ↗</a>
+                        </p>
                     </div>
-                    <div class="detail-item">
-                        <p class="detail-label">👔 Dress Code</p>
-                        <p class="detail-value">Casual</p>
-                    </div>
-                    <div class="detail-item">
-                        <p class="detail-label">🍽 Catering</p>
-                        <p class="detail-value">No Koshary (probably)</p>
-                    </div>
+                    <div class="detail-item"><p class="detail-label">👔 Dress Code</p><p class="detail-value">Casual</p></div>
+                    <div class="detail-item"><p class="detail-label">🍽 Catering</p><p class="detail-value">No Koshary (probably)</p></div>
                 </div>
             </div>
 
@@ -817,314 +207,62 @@
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="rsvp-card">
                     <p class="rsvp-title">Will You Join Us? 🥂</p>
-                    <p class="rsvp-note">
-                        Your presence would make this evening truly magical.<br>
-                        Your absence, however, will be <strong>noted, discussed at length, and brought up
-                        at every family gathering for the next decade.</strong>
-                        <br><br>
-                        No pressure at all. Totally your call. We're watching. 👀
-                    </p>
-                    <button class="btn-rsvp" id="rsvpBtn" onclick="handleRSVP(this)">
-                        I'll Be There &nbsp;✦
-                    </button>
+                    <p class="rsvp-note">Your presence would make this evening truly magical.<br>Your absence, however, will be <strong>noted, discussed at length, and brought up at every family gathering for the next decade.</strong><br><br>No pressure at all. Totally your call. We're watching. 👀</p>
+                    <button class="btn-rsvp" id="rsvpBtn" onclick="handleRSVP(this)">I'll Be There ✦</button>
                 </div>
             </div>
 
             <div class="reveal" id="r5">
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <p class="footer-sig">With all our love — Shahd &amp; Marwan 💍</p>
+                <p class="footer-sig">With all our love — Shahd & Marwan 💍</p>
             </div>
-
         </div>
-    </div>
-    <script>
-    /* ---- STARS ---- */
+    </div><script>
+    /* STARS */
     const canvas = document.getElementById('stars-canvas');
-    const ctx    = canvas.getContext('2d');
-    let stars    = [];
-
+    const ctx = canvas.getContext('2d');
+    let stars = [];
     function initStars() {
-        canvas.width  = window.innerWidth;
+        canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        stars = Array.from({length: 160}, () => ({
-            x:      Math.random() * canvas.width,
-            y:      Math.random() * canvas.height,
-            r:      Math.random() * 1.4 + 0.3,
-            base:   Math.random() * 0.55 + 0.08,
-            speed:  Math.random() * 0.009 + 0.003,
-            offset: Math.random() * Math.PI * 2
-        }));
+        stars = Array.from({length: 160}, () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.4 + 0.3, base: Math.random() * 0.55 + 0.08, speed: Math.random() * 0.009 + 0.003, offset: Math.random() * Math.PI * 2 }));
     }
-
-    (function animate(t) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        stars.forEach(s => {
-            const a = s.base * (0.5 + 0.5 * Math.sin(t * s.speed + s.offset));
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${a})`;
-            ctx.fill();
-        });
-        requestAnimationFrame(animate);
-    })(0);
-
+    (function animate(t) { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { const a = s.base * (0.5 + 0.5 * Math.sin(t * s.speed + s.offset)); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill(); }); requestAnimationFrame(animate); })(0);
     window.addEventListener('resize', initStars);
     initStars();
 
-    /* ---- AUDIO ---- */
+    /* AUDIO */
     var audio = document.getElementById('bgMusic');
+    function playMusic() { if (audio.src && audio.src !== window.location.href) { audio.play().then(function() { document.getElementById('vinylDisc').classList.add('spinning'); document.getElementById('vinyl-wrapper').classList.add('playing'); document.getElementById('vinylIcon').textContent = '❙❙ pause'; }).catch(function() {}); } }
+    function toggleMusic() { if (!audio.paused) { audio.pause(); document.getElementById('vinylDisc').classList.remove('spinning'); document.getElementById('vinyl-wrapper').classList.remove('playing'); document.getElementById('vinylIcon').textContent = '▶ play'; } else { playMusic(); } }
 
-    function playMusic() {
-        audio.play().then(function() {
-            document.getElementById('vinylDisc').classList.add('spinning');
-            document.getElementById('vinyl-wrapper').classList.add('playing');
-            document.getElementById('vinylIcon').textContent = '❙❙ pause';
-        }).catch(function(e) {
-            console.log('audio error:', e);
-        });
-    }
-
-    function toggleMusic() {
-        if (!audio.paused) {
-            audio.pause();
-            document.getElementById('vinylDisc').classList.remove('spinning');
-            document.getElementById('vinyl-wrapper').classList.remove('playing');
-            document.getElementById('vinylIcon').textContent = '▶ play';
-        } else {
-            playMusic();
-        }
-    }
-
-    /* ---- ENVELOPE OPEN ---- */
+    /* ENVELOPE */
     let opened = false;
+    function openEnvelope() { if (opened) return; opened = true; document.getElementById('envelope').classList.add('opening'); setTimeout(launchConfetti, 420); setTimeout(function() { document.getElementById('envelope-screen').classList.add('away'); document.getElementById('invite-page').classList.add('visible'); document.getElementById('vinyl-wrapper').classList.add('visible'); setTimeout(function() { playMusic(); }, 300); setupReveal(); setTimeout(function() { document.getElementById('r1').classList.add('shown'); }, 550); }, 1600); }
 
-    function openEnvelope() {
-        if (opened) return;
-        opened = true;
+    /* CONFETTI */
+    function launchConfetti() { var colors = ['#c9a84c','#e8c97a','#c41e3a','#f7eedf','#ffffff','#e8304a','#f0c060']; for (var i = 0; i < 80; i++) { (function(i) { setTimeout(function() { var el = document.createElement('div'); var big = Math.random() > 0.5; el.className = 'confetti-piece'; el.style.cssText = 'left:' + (Math.random()*100) + 'vw;background:' + colors[Math.floor(Math.random()*colors.length)] + ';border-radius:' + (big ? '50%' : '2px') + ';width:' + (Math.random()*7+5) + 'px;height:' + (Math.random()*7+5) + 'px;animation-duration:' + (Math.random()*1.6+1.8) + 's;transform:rotate(' + (Math.random()*360) + 'deg);'; document.body.appendChild(el); setTimeout(function(){ el.remove(); }, 3800); }, i * 28 + Math.random() * 180); })(i); } }
 
-        document.getElementById('envelope').classList.add('opening');
+    /* REVEAL */
+    function setupReveal() { var io = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('shown'); }); }, { threshold: 0.12 }); document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); }); }
 
-        setTimeout(launchConfetti, 420);
-
-        setTimeout(() => {
-            document.getElementById('envelope-screen').classList.add('away');
-            document.getElementById('invite-page').classList.add('visible');
-            document.getElementById('vinyl-wrapper').classList.add('visible');
-            setTimeout(() => { playMusic(); }, 300);
-            setupReveal();
-            setTimeout(() => document.getElementById('r1').classList.add('shown'), 550);
-        }, 1600);
-    }
-
-    /* ---- CONFETTI ---- */
-    function launchConfetti() {
-        var colors = ['#c9a84c','#e8c97a','#c41e3a','#f7eedf','#ffffff','#e8304a','#f0c060'];
-        for (var i = 0; i < 80; i++) {
-            (function(i) {
-                setTimeout(function() {
-                    var el = document.createElement('div');
-                    var big = Math.random() > 0.5;
-                    el.className = 'confetti-piece';
-                    el.style.cssText =
-                        'left:' + (Math.random()*100) + 'vw;' +
-                        'background:' + colors[Math.floor(Math.random()*colors.length)] + ';' +
-                        'border-radius:' + (big ? '50%' : '2px') + ';' +
-                        'width:'  + (Math.random()*7+5) + 'px;' +
-                        'height:' + (Math.random()*7+5) + 'px;' +
-                        'animation-duration:' + (Math.random()*1.6+1.8) + 's;' +
-                        'transform:rotate(' + (Math.random()*360) + 'deg);';
-                    document.body.appendChild(el);
-                    setTimeout(function(){ el.remove(); }, 3800);
-                }, i * 28 + Math.random() * 180);
-            })(i);
-        }
-    }
-
-    /* ---- SCROLL REVEAL ---- */
-    function setupReveal() {
-        var io = new IntersectionObserver(function(entries) {
-            entries.forEach(function(e) {
-                if (e.isIntersecting) e.target.classList.add('shown');
-            });
-        }, { threshold: 0.12 });
-        document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-    }
-
-
-        /* ---- MAZE GAME ---- */
-    var CELL = 32;
-    var COLS = 13;
-    var ROWS = 11;
-    var mazeGrid = [];
-    var player = {x:0, y:0};
-    var goal   = {x: COLS-1, y: ROWS-1};
-    var mazeWon = false;
-    var touchStart = null;
-    var funnyMsgs = [
-        "مروان تاه — عادي ده مش أول مرة 😂",
-        "اتجه لشهد مش للمطبخ يا مروان! 🍕",
-        "قول بسم الله وامشي يمين 🧭",
-        "مروان بيفكر... ده أطول من المعتاد 🤔",
-        "شهد بتستنى يا ابني يلا! ⏰"
-    ];
+    /* MAZE GAME */
+    var CELL = 32, COLS = 13, ROWS = 11, mazeGrid = [], player = {x:0, y:0}, goal = {x: COLS-1, y: ROWS-1}, mazeWon = false, touchStart = null;
+    var funnyMsgs = ["Marwan is lost 😂", "Turn towards Shahd!", "Say bismillah and go right 🧭", "Marwan is thinking...", "Shahd is waiting! ⏰"];
     var msgTimer = null;
+    function carve(grid, x, y) { var dirs = [{dx:0,dy:-2},{dx:0,dy:2},{dx:-2,dy:0},{dx:2,dy:0}]; dirs.sort(function(){ return Math.random()-0.5; }); dirs.forEach(function(d) { var nx = x + d.dx, ny = y + d.dy; if (nx>=0 && nx<COLS && ny>=0 && ny<ROWS && grid[ny][nx] === 1) { grid[ny - d.dy/2][nx - d.dx/2] = 0; grid[ny][nx] = 0; carve(grid, nx, ny); } }); }
+    function initMaze() { mazeWon = false; document.getElementById('mazeStart').style.display = 'none'; document.getElementById('mazeArea').style.display = 'block'; document.getElementById('mazeMsg').textContent = ''; document.getElementById('mazeRetry').style.display = 'none'; mazeGrid = []; for (var r=0; r<ROWS; r++) { mazeGrid.push([]); for (var c=0; c<COLS; c++) mazeGrid[r].push(1); } mazeGrid[0][0] = 0; carve(mazeGrid, 0, 0); mazeGrid[ROWS-11][COLS-1] = 0; player = {x:0, y:0}; var canvas = document.getElementById('mazeCanvas'); var w = Math.min(420, window.innerWidth - 80); CELL = Math.floor(w / COLS); canvas.width = CELL * COLS; canvas.height = CELL * ROWS; drawMaze(); startFunnyMsgs(); }
+    function drawMaze() { var canvas = document.getElementById('mazeCanvas'); var ctx = canvas.getContext('2d'); ctx.fillStyle = '#0f0a12'; ctx.fillRect(0,0,canvas.width,canvas.height); for (var r=0; r<ROWS; r++) { for (var c=0; c<COLS; c++) { if (mazeGrid[r][c] === 1) { ctx.fillStyle = '#2a0d1c'; ctx.fillRect(c*CELL, r*CELL, CELL, CELL); ctx.strokeStyle = 'rgba(201,168,76,0.12)'; ctx.strokeRect(c*CELL+0.5, r*CELL+0.5, CELL-1, CELL-1); } } } var gx = goal.x * CELL + CELL/2; var gy = goal.y * CELL + CELL/2; var grd = ctx.createRadialGradient(gx,gy,2,gx,gy,CELL); grd.addColorStop(0, 'rgba(232,192,122,0.35)'); grd.addColorStop(1, 'transparent'); ctx.fillStyle = grd; ctx.fillRect(goal.x*CELL, goal.y*CELL, CELL, CELL); ctx.font = 'bold ' + Math.floor(CELL*0.62) + 'px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#e8c97a'; ctx.fillText('S', goal.x*CELL + CELL/2, goal.y*CELL + CELL/2 + 1); ctx.fillStyle = '#ffffff'; ctx.font = 'bold ' + Math.floor(CELL*0.58) + 'px serif'; ctx.fillText('M', player.x*CELL + CELL/2, player.y*CELL + CELL/2 + 1); }
+    function movePlayer(dx, dy) { if (mazeWon) return; var nx = player.x + dx; var ny = player.y + dy; if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return; if (mazeGrid[ny][nx] === 1) return; player.x = nx; player.y = ny; drawMaze(); if (player.x === goal.x && player.y === goal.y) { mazeWon = true; clearInterval(msgTimer); winMaze(); } }
+    function winMaze() { var canvas = document.getElementById('mazeCanvas'); var ctx = canvas.getContext('2d'); ctx.fillStyle = 'rgba(15,10,18,0.75)'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.font = 'bold ' + Math.floor(CELL*1.2) + 'px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#e8c97a'; ctx.fillText('💍', canvas.width/2, canvas.height/2 - CELL*0.6); ctx.font = 'bold ' + Math.floor(CELL*0.55) + 'px serif'; ctx.fillStyle = '#f7eedf'; ctx.fillText('You reached Shahd! 🎉', canvas.width/2, canvas.height/2 + CELL*0.4); document.getElementById('mazeMsg').textContent = 'Marwan reached Shahd — just like he will forever 💍'; document.getElementById('mazeRetry').style.display = 'inline-block'; }
+    function startFunnyMsgs() { var i = 0; clearInterval(msgTimer); msgTimer = setInterval(function() { if (!mazeWon) { document.getElementById('mazeMsg').textContent = funnyMsgs[i % funnyMsgs.length]; i++; } }, 3500); }
+    document.addEventListener('keydown', function(e) { var map = {ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}; var d = map[e.key]; if (d) { e.preventDefault(); movePlayer(d[0],d[1]); } });
+    document.addEventListener('touchstart', function(e) { if (!document.getElementById('mazeArea') || document.getElementById('mazeArea').style.display==='none') return; touchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY}; }, {passive:true});
+    document.addEventListener('touchend', function(e) { if (!touchStart || mazeWon) return; var dx = e.changedTouches[0].clientX - touchStart.x; var dy = e.changedTouches[0].clientY - touchStart.y; touchStart = null; if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return; if (Math.abs(dx) > Math.abs(dy)) movePlayer(dx>0?1:-1, 0); else movePlayer(0, dy>0?1:-1); }, {passive:true});
 
-    function carve(grid, x, y) {
-        var dirs = [{dx:0,dy:-2},{dx:0,dy:2},{dx:-2,dy:0},{dx:2,dy:0}];
-        dirs.sort(function(){ return Math.random()-0.5; });
-        dirs.forEach(function(d) {
-            var nx = x + d.dx, ny = y + d.dy;
-            if (nx>=0 && nx<COLS && ny>=0 && ny<ROWS && grid[ny][nx] === 1) {
-                grid[ny - d.dy/2][nx - d.dx/2] = 0;
-                grid[ny][nx] = 0;
-                carve(grid, nx, ny);
-            }
-        });
-    }
+    /* RSVP */
+    function handleRSVP(btn) { if (btn.classList.contains('clicked')) return; btn.textContent = '🎉 See You There!'; btn.classList.add('clicked'); btn.disabled = true; }
+</script>
 
-    function initMaze() {
-        mazeWon = false;
-        document.getElementById('mazeStart').style.display = 'none';
-        document.getElementById('mazeArea').style.display  = 'block';
-        document.getElementById('mazeMsg').textContent = '';
-        document.getElementById('mazeRetry').style.display = 'none';
-
-        // build grid
-        mazeGrid = [];
-        for (var r=0; r<ROWS; r++) {
-            mazeGrid.push([]);
-            for (var c=0; c<COLS; c++) mazeGrid[r].push(1);
-        }
-        mazeGrid[0][0] = 0;
-        carve(mazeGrid, 0, 0);
-        mazeGrid[ROWS-1][COLS-1] = 0;
-
-        player = {x:0, y:0};
-        goal   = {x:COLS-1, y:ROWS-1};
-
-        var canvas = document.getElementById('mazeCanvas');
-        var w = Math.min(420, window.innerWidth - 80);
-        CELL = Math.floor(w / COLS);
-        canvas.width  = CELL * COLS;
-        canvas.height = CELL * ROWS;
-
-        drawMaze();
-        startFunnyMsgs();
-    }
-
-    function drawMaze() {
-        var canvas = document.getElementById('mazeCanvas');
-        var ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#0f0a12';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        for (var r=0; r<ROWS; r++) {
-            for (var c=0; c<COLS; c++) {
-                if (mazeGrid[r][c] === 1) {
-                    ctx.fillStyle = '#2a0d1c';
-                    ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
-                    ctx.strokeStyle = 'rgba(201,168,76,0.12)';
-                    ctx.strokeRect(c*CELL+0.5, r*CELL+0.5, CELL-1, CELL-1);
-                }
-            }
-        }
-
-        // goal glow
-        var gx = goal.x * CELL + CELL/2;
-        var gy = goal.y * CELL + CELL/2;
-        var grd = ctx.createRadialGradient(gx,gy,2,gx,gy,CELL);
-        grd.addColorStop(0, 'rgba(232,192,122,0.35)');
-        grd.addColorStop(1, 'transparent');
-        ctx.fillStyle = grd;
-        ctx.fillRect(goal.x*CELL, goal.y*CELL, CELL, CELL);
-
-        // draw S
-        ctx.font = 'bold ' + Math.floor(CELL*0.62) + 'px Dancing Script, serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#e8c97a';
-        ctx.fillText('S', goal.x*CELL + CELL/2, goal.y*CELL + CELL/2 + 1);
-
-        // draw M (player)
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold ' + Math.floor(CELL*0.58) + 'px serif';
-        ctx.fillText('M', player.x*CELL + CELL/2, player.y*CELL + CELL/2 + 1);
-    }
-
-    function movePlayer(dx, dy) {
-        if (mazeWon) return;
-        var nx = player.x + dx;
-        var ny = player.y + dy;
-        if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return;
-        if (mazeGrid[ny][nx] === 1) return;
-        player.x = nx;
-        player.y = ny;
-        drawMaze();
-        if (player.x === goal.x && player.y === goal.y) {
-            mazeWon = true;
-            clearInterval(msgTimer);
-            winMaze();
-        }
-    }
-
-    function winMaze() {
-        var canvas = document.getElementById('mazeCanvas');
-        var ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'rgba(15,10,18,0.75)';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.font = 'bold ' + Math.floor(CELL*1.2) + 'px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#e8c97a';
-        ctx.fillText('💍', canvas.width/2, canvas.height/2 - CELL*0.6);
-        ctx.font = 'bold ' + Math.floor(CELL*0.55) + 'px serif';
-        ctx.fillStyle = '#f7eedf';
-        ctx.fillText('وصلت يا مروان! 🎉', canvas.width/2, canvas.height/2 + CELL*0.4);
-        document.getElementById('mazeMsg').textContent = 'وصل مروان لشهد في الآخر — زي ما هيفضل يعمل طول عمره 💍';
-        document.getElementById('mazeRetry').style.display = 'inline-block';
-    }
-
-    function startFunnyMsgs() {
-        var i = 0;
-        clearInterval(msgTimer);
-        msgTimer = setInterval(function() {
-            if (!mazeWon) {
-                document.getElementById('mazeMsg').textContent = funnyMsgs[i % funnyMsgs.length];
-                i++;
-            }
-        }, 3500);
-    }
-
-    // keyboard
-    document.addEventListener('keydown', function(e) {
-        var map = {ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
-        var d = map[e.key];
-        if (d) { e.preventDefault(); movePlayer(d[0],d[1]); }
-    });
-
-    // touch swipe
-    document.addEventListener('touchstart', function(e) {
-        if (!document.getElementById('mazeArea') || document.getElementById('mazeArea').style.display==='none') return;
-        touchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
-    }, {passive:true});
-
-    document.addEventListener('touchend', function(e) {
-        if (!touchStart || mazeWon) return;
-        var dx = e.changedTouches[0].clientX - touchStart.x;
-        var dy = e.changedTouches[0].clientY - touchStart.y;
-        touchStart = null;
-        if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return;
-        if (Math.abs(dx) > Math.abs(dy)) movePlayer(dx>0?1:-1, 0);
-        else movePlayer(0, dy>0?1:-1);
-    }, {passive:true});
-
-    /* ---- RSVP ---- */ */
-    function handleRSVP(btn) {
-        if (btn.classList.contains('clicked')) return;
-        btn.textContent = '🎉 See You There!';
-        btn.classList.add('clicked');
-        btn.disabled = true;
-    }
-    </script>
 </body>
 </html>
