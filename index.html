@@ -36,6 +36,128 @@
             z-index: 0;
         }
 
+        /* ===== VINYL RECORD ===== */
+        #vinyl-wrapper {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 600;
+            opacity: 0;
+            transform: scale(0.5) rotate(-20deg);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.4,0.64,1);
+            cursor: pointer;
+        }
+
+        #vinyl-wrapper.visible {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .vinyl-disc {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                #c9a84c 0%, #a87c2a 8%, #7a5c1a 10%,
+                #0f0f0f 11%, #1e1e1e 15%, #0f0f0f 16%,
+                #1e1e1e 22%, #0f0f0f 23%, #1e1e1e 30%,
+                #0f0f0f 31%, #1e1e1e 39%, #0f0f0f 40%,
+                #1e1e1e 50%, #0f0f0f 51%, #1e1e1e 62%,
+                #0f0f0f 63%, #1e1e1e 76%, #0f0f0f 77%,
+                #0a0a0a 100%
+            );
+            box-shadow:
+                0 6px 28px rgba(0,0,0,0.65),
+                0 0 0 1px rgba(255,255,255,0.04),
+                inset 0 2px 4px rgba(255,255,255,0.04);
+            animation: vinylSpin 2.2s linear infinite;
+            animation-play-state: paused;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .vinyl-disc:hover {
+            box-shadow: 0 8px 35px rgba(201,168,76,0.35), 0 0 0 1px rgba(201,168,76,0.2);
+        }
+
+        .vinyl-disc.spinning {
+            animation-play-state: running;
+        }
+
+        @keyframes vinylSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* center label */
+        .vinyl-label {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 38% 32%, #e8c97a, #c9a84c 50%, #8b6014);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .vinyl-label span {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5px;
+            color: rgba(255,255,240,0.9);
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        /* needle arm */
+        .vinyl-needle {
+            position: absolute;
+            top: 2px;
+            right: -14px;
+            width: 34px;
+            height: 2.5px;
+            background: linear-gradient(to left, #888, #ddd, #aaa);
+            transform-origin: right center;
+            transform: rotate(20deg);
+            border-radius: 2px;
+            transition: transform 0.6s ease;
+        }
+
+        .vinyl-needle::before {
+            content: '';
+            position: absolute;
+            right: -1px; top: -5px;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #ccc, #888);
+        }
+
+        .vinyl-needle::after {
+            content: '';
+            position: absolute;
+            left: 0; top: -1px;
+            width: 5px; height: 4px;
+            background: #c0a020;
+            border-radius: 1px;
+        }
+
+        #vinyl-wrapper:not(.playing) .vinyl-needle {
+            transform: rotate(0deg);
+        }
+
+        /* play/pause icon below disc */
+        .vinyl-icon {
+            text-align: center;
+            font-size: 0.6rem;
+            color: rgba(201,168,76,0.6);
+            letter-spacing: 1px;
+            margin-top: 5px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
         /* ===== ENVELOPE SCREEN ===== */
         #envelope-screen {
             position: fixed;
@@ -80,7 +202,6 @@
             user-select: none;
         }
 
-        /* main envelope rectangle */
         .env-body {
             position: absolute;
             inset: 0;
@@ -93,7 +214,6 @@
             z-index: 1;
         }
 
-        /* fold-line decoration (the X inside) */
         .env-body::before {
             content: '';
             position: absolute;
@@ -105,12 +225,10 @@
             pointer-events: none;
         }
 
-        /* letter peeking inside */
         .letter-inner {
             position: absolute;
             bottom: 8px;
-            left: 18px;
-            right: 18px;
+            left: 18px; right: 18px;
             height: 68%;
             background: linear-gradient(155deg, #fffbf5 0%, #fff5ea 100%);
             border-radius: 2px;
@@ -132,12 +250,10 @@
             transform: translateY(-115px);
         }
 
-        /* top flap — downward-pointing triangle */
         .env-flap {
             position: absolute;
             top: 0; left: 0;
-            width: 100%;
-            height: 56%;
+            width: 100%; height: 56%;
             background: var(--env-flap);
             clip-path: polygon(0 0, 100% 0, 50% 92%);
             transform-origin: top center;
@@ -146,7 +262,6 @@
             z-index: 10;
         }
 
-        /* subtle gold border on flap */
         .env-flap::after {
             content: '';
             position: absolute;
@@ -264,7 +379,7 @@
         }
         .reveal.shown { opacity: 1; transform: translateY(0); }
 
-        /* ===== ORNAMENT DIVIDER ===== */
+        /* ===== ORNAMENT ===== */
         .ornament {
             display: flex;
             align-items: center;
@@ -316,7 +431,7 @@
         }
 
         @keyframes floatRing {
-            0%,100% { transform: translateY(0)   rotate(-4deg); }
+            0%,100% { transform: translateY(0)    rotate(-4deg); }
             50%      { transform: translateY(-12px) rotate(4deg); }
         }
 
@@ -330,7 +445,7 @@
             margin-top: 0.8rem;
         }
 
-        /* ===== STORY CARD ===== */
+        /* ===== STORY ===== */
         .story-card {
             position: relative;
             background: rgba(255,255,255,0.025);
@@ -477,6 +592,7 @@
             .details-grid  { grid-template-columns: 1fr; }
             .story-card    { padding: 1.8rem 1.5rem; }
             .rsvp-card     { padding: 2rem 1.5rem; }
+            #vinyl-wrapper { top: 12px; right: 12px; }
         }
     </style>
 </head>
@@ -484,7 +600,19 @@
 
     <canvas id="stars-canvas"></canvas>
 
-    <!-- ============ ENVELOPE SCREEN ============ -->
+    <!-- hidden YouTube player -->
+    <div id="yt-player" style="position:absolute; left:-9999px; top:-9999px; width:1px; height:1px;"></div>
+
+    <!-- ===== VINYL RECORD ===== -->
+    <div id="vinyl-wrapper" onclick="toggleMusic()" title="تشغيل / إيقاف">
+        <div class="vinyl-disc" id="vinylDisc">
+            <div class="vinyl-label"><span>S&amp;M</span></div>
+        </div>
+        <div class="vinyl-needle"></div>
+        <div class="vinyl-icon" id="vinylIcon">▶ play</div>
+    </div>
+
+    <!-- ===== ENVELOPE SCREEN ===== -->
     <div id="envelope-screen">
         <p class="hint">✦ &nbsp; tap to open &nbsp; ✦</p>
 
@@ -500,18 +628,13 @@
         </div>
     </div>
 
-    <!-- ============ INVITATION PAGE ============ -->
+    <!-- ===== INVITATION PAGE ===== -->
     <div id="invite-page">
         <div class="invite-inner">
 
-            <!-- HERO -->
             <div class="reveal" id="r1" style="text-align:center;">
                 <p class="eyebrow">You are warmly invited to celebrate</p>
-                <div class="ornament">
-                    <div class="ornament-line"></div>
-                    <div class="ornament-dot">◆</div>
-                    <div class="ornament-line"></div>
-                </div>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="hero-names">
                     Shahd
                     <span class="and-word">&amp;</span>
@@ -521,13 +644,8 @@
                 <p class="hero-sub">Engagement Celebration</p>
             </div>
 
-            <!-- STORY -->
             <div class="reveal" id="r2">
-                <div class="ornament">
-                    <div class="ornament-line"></div>
-                    <div class="ornament-dot">◆</div>
-                    <div class="ornament-line"></div>
-                </div>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="story-card">
                     <p class="story-text">
                         After <strong>years of very heated restaurant debates</strong>
@@ -549,13 +667,8 @@
                 </div>
             </div>
 
-            <!-- DETAILS -->
             <div class="reveal" id="r3">
-                <div class="ornament">
-                    <div class="ornament-line"></div>
-                    <div class="ornament-dot">◆</div>
-                    <div class="ornament-line"></div>
-                </div>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <p class="section-title">The Details</p>
                 <div class="details-grid">
                     <div class="detail-item">
@@ -564,11 +677,11 @@
                     </div>
                     <div class="detail-item">
                         <p class="detail-label">📍 Venue</p>
-                        <p class="detail-value">To Be Announced</p>
+                        <p class="detail-value">Izoya</p>
                     </div>
                     <div class="detail-item">
                         <p class="detail-label">👔 Dress Code</p>
-                        <p class="detail-value">Actually Fancy</p>
+                        <p class="detail-value">Casual</p>
                     </div>
                     <div class="detail-item">
                         <p class="detail-label">🍽 Catering</p>
@@ -577,13 +690,8 @@
                 </div>
             </div>
 
-            <!-- RSVP -->
             <div class="reveal" id="r4">
-                <div class="ornament">
-                    <div class="ornament-line"></div>
-                    <div class="ornament-dot">◆</div>
-                    <div class="ornament-line"></div>
-                </div>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <div class="rsvp-card">
                     <p class="rsvp-title">Will You Join Us? 🥂</p>
                     <p class="rsvp-note">
@@ -599,21 +707,19 @@
                 </div>
             </div>
 
-            <!-- FOOTER -->
             <div class="reveal" id="r5">
-                <div class="ornament">
-                    <div class="ornament-line"></div>
-                    <div class="ornament-dot">◆</div>
-                    <div class="ornament-line"></div>
-                </div>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
                 <p class="footer-sig">With all our love — Shahd &amp; Marwan 💍</p>
             </div>
 
         </div>
     </div>
 
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <script>
-    /* ---- TWINKLING STARS ---- */
+    /* ---- STARS ---- */
     const canvas = document.getElementById('stars-canvas');
     const ctx    = canvas.getContext('2d');
     let stars    = [];
@@ -646,6 +752,52 @@
     window.addEventListener('resize', initStars);
     initStars();
 
+    /* ---- YOUTUBE PLAYER ---- */
+    var ytPlayer;
+    var musicReady = false;
+
+    window.onYouTubeIframeAPIReady = function() {
+        ytPlayer = new YT.Player('yt-player', {
+            videoId: 'zKr0XtVlGec',
+            playerVars: {
+                autoplay: 0,
+                controls: 0,
+                rel: 0,
+                modestbranding: 1,
+                loop: 1,
+                playlist: 'zKr0XtVlGec'
+            },
+            events: {
+                onReady: function() { musicReady = true; },
+                onStateChange: function(e) {
+                    var disc = document.getElementById('vinylDisc');
+                    var icon = document.getElementById('vinylIcon');
+                    var wrap = document.getElementById('vinyl-wrapper');
+                    if (e.data === YT.PlayerState.PLAYING) {
+                        disc.classList.add('spinning');
+                        wrap.classList.add('playing');
+                        icon.textContent = '❙❙ pause';
+                    } else {
+                        disc.classList.remove('spinning');
+                        wrap.classList.remove('playing');
+                        icon.textContent = '▶ play';
+                    }
+                }
+            }
+        });
+    };
+
+    /* ---- TOGGLE MUSIC ---- */
+    function toggleMusic() {
+        if (!ytPlayer || !musicReady) return;
+        var state = ytPlayer.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+            ytPlayer.pauseVideo();
+        } else {
+            ytPlayer.playVideo();
+        }
+    }
+
     /* ---- ENVELOPE OPEN ---- */
     let opened = false;
 
@@ -659,8 +811,16 @@
 
         setTimeout(() => {
             document.getElementById('envelope-screen').classList.add('away');
-            const page = document.getElementById('invite-page');
-            page.classList.add('visible');
+            document.getElementById('invite-page').classList.add('visible');
+
+            // show vinyl
+            document.getElementById('vinyl-wrapper').classList.add('visible');
+
+            // play music
+            setTimeout(() => {
+                if (ytPlayer && musicReady) ytPlayer.playVideo();
+            }, 400);
+
             setupReveal();
             setTimeout(() => document.getElementById('r1').classList.add('shown'), 550);
         }, 1600);
@@ -668,37 +828,39 @@
 
     /* ---- CONFETTI ---- */
     function launchConfetti() {
-        const colors = ['#c9a84c','#e8c97a','#c41e3a','#f7eedf','#ffffff','#e8304a','#f0c060'];
-        for (let i = 0; i < 80; i++) {
-            setTimeout(() => {
-                const el  = document.createElement('div');
-                const big = Math.random() > 0.5;
-                el.className = 'confetti-piece';
-                el.style.cssText = `
-                    left:${Math.random()*100}vw;
-                    background:${colors[Math.floor(Math.random()*colors.length)]};
-                    border-radius:${big ? '50%' : '2px'};
-                    width:${Math.random()*7+5}px;
-                    height:${Math.random()*7+5}px;
-                    animation-duration:${Math.random()*1.6+1.8}s;
-                    transform:rotate(${Math.random()*360}deg);
-                `;
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 3800);
-            }, i * 28 + Math.random() * 180);
+        var colors = ['#c9a84c','#e8c97a','#c41e3a','#f7eedf','#ffffff','#e8304a','#f0c060'];
+        for (var i = 0; i < 80; i++) {
+            (function(i) {
+                setTimeout(function() {
+                    var el = document.createElement('div');
+                    var big = Math.random() > 0.5;
+                    el.className = 'confetti-piece';
+                    el.style.cssText =
+                        'left:' + (Math.random()*100) + 'vw;' +
+                        'background:' + colors[Math.floor(Math.random()*colors.length)] + ';' +
+                        'border-radius:' + (big ? '50%' : '2px') + ';' +
+                        'width:'  + (Math.random()*7+5) + 'px;' +
+                        'height:' + (Math.random()*7+5) + 'px;' +
+                        'animation-duration:' + (Math.random()*1.6+1.8) + 's;' +
+                        'transform:rotate(' + (Math.random()*360) + 'deg);';
+                    document.body.appendChild(el);
+                    setTimeout(function(){ el.remove(); }, 3800);
+                }, i * 28 + Math.random() * 180);
+            })(i);
         }
     }
 
     /* ---- SCROLL REVEAL ---- */
     function setupReveal() {
-        const io = new IntersectionObserver(
-            entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('shown'); }),
-            { threshold: 0.12 }
-        );
-        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+        var io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) e.target.classList.add('shown');
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
     }
 
-    /* ---- RSVP BUTTON ---- */
+    /* ---- RSVP ---- */
     function handleRSVP(btn) {
         if (btn.classList.contains('clicked')) return;
         btn.textContent = '🎉 See You There!';
