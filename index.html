@@ -7,82 +7,80 @@
     <!-- Fonts Ashyak & Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Montserrat:wght=300;400;600&family=Alex+Brush&display=swap" rel="stylesheet">
     <style>
-        /* Exact Navy Blue & Blush Pink Palette from Image */
         :root {
-            --navy-dark: #071D39;      /* الكحلي الداكن الفخم */
-            --navy-card: #0F2D52;      /* كحلي ملكي للكروت */
-            --blush-pink: #F8D7DA;     /* الـ Blush الوردي الصافي */
-            --blush-soft: #FCEFF1;     /* روز خفيف جداً للخلفيات */
-            --rose-gold: #DCA29A;      /* روز جولد للكتابة الهادية */
+            --navy-dark: #071D39;      
+            --navy-card: #0F2D52;      
+            --blush-pink: #F8D7DA;     
+            --blush-soft: #FCEFF1;     
+            --rose-gold: #DCA29A;      
         }
 
         body { margin: 0; padding: 0; background-color: var(--navy-dark); color: var(--blush-pink); font-family: 'Montserrat', sans-serif; overflow-x: hidden; text-align: center; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Background Particle Canvas (Blush Soft Dust) */
         #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        
-        /* Music Control */
         .music-btn { position: fixed; top: 20px; right: 20px; z-index: 999; background: rgba(248, 215, 218, 0.2); border: 1px solid var(--blush-pink); color: var(--blush-pink); padding: 12px; border-radius: 50%; cursor: pointer; font-size: 20px; display: none; transition: all 0.3s; }
-        .music-btn:hover { background: var(--blush-pink); color: var(--navy-dark); }
         
-        /* Premium Wedding Envelope Styling */
-        #envelope-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--navy-dark); z-index: 100; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.8s ease-in-out; }
+        /* --- 3D ENVELOPE INTERACTIVE SECTION --- */
+        #envelope-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--navy-dark); z-index: 100; display: flex; justify-content: center; align-items: center; perspective: 1000px; transition: opacity 1s ease 1.5s, visibility 1s ease 1.5s; }
         
-        .wedding-envelope { width: 340px; height: 240px; background: var(--navy-card); border: 3px double var(--blush-pink); border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; transition: transform 0.4s ease; overflow: hidden; }
-        .wedding-envelope:hover { transform: scale(1.04); border-color: var(--rose-gold); }
+        .envelope-wrapper { position: relative; width: 320px; height: 220px; background: var(--navy-card); border-radius: 0 0 12px 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer; transform-style: preserve-3d; transition: transform 0.5s; }
+        .envelope-wrapper:hover { transform: translateY(-5px); }
+
+        /* The 3D Top Flap (المثلث اللي بيقفل الجواب) */
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-top: 120px solid var(--navy-card); border-radius: 12px 12px 0 0; transform-origin: top; transition: transform 0.8s ease; z-index: 4; filter: drop-shadow(0px 4px 5px rgba(0,0,0,0.3)); }
         
-        /* Royal Seal Accent */
-        .envelope-seal { width: 60px; height: 60px; background: var(--blush-pink); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--navy-dark); font-size: 24px; font-weight: bold; font-family: 'Cormorant Garamond', serif; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px; border: 2px solid var(--rose-gold); }
+        /* Base Pocket of Envelope */
+        .envelope-pocket { position: absolute; bottom: 0; left: 0; width: 100%; height: 130px; background: #133863; border-radius: 0 0 12px 12px; z-index: 3; display: flex; flex-direction: column; justify-content: center; align-items: center; border-top: 1px solid rgba(248, 215, 218, 0.1); }
         
-        .wedding-envelope h2 { font-family: 'Cormorant Garamond', serif; font-size: 34px; margin: 0; letter-spacing: 3px; font-weight: 600; color: var(--blush-pink); text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .wedding-envelope p { font-family: 'Montserrat', sans-serif; font-size: 11px; margin: 8px 0 0 0; opacity: 0.8; letter-spacing: 3px; font-weight: 300; }
-        .click-to-open { font-family: 'Alex Brush', cursive; font-size: 32px; color: var(--rose-gold); margin-top: 20px; }
+        /* Luxury Wax Seal (الختم الملوكي) */
+        .wax-seal { position: absolute; top: -30px; width: 60px; height: 60px; background: var(--blush-pink); border: 2px solid var(--rose-gold); border-radius: 50%; z-index: 5; display: flex; justify-content: center; align-items: center; color: var(--navy-dark); font-family: 'Cormorant Garamond', serif; font-weight: bold; font-size: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); transition: transform 0.5s ease, opacity 0.3s ease; }
         
-        /* Main Layout Control */
-        .hidden { display: none !important; }
+        .pocket-text { color: var(--blush-pink); font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 25px; letter-spacing: 2px; }
+        .click-hint { font-family: 'Alex Brush', cursive; font-size: 26px; color: var(--rose-gold); margin-top: 10px; }
+
+        /* Inside Hidden Card that slides out */
+        .hidden-card { position: absolute; top: 10px; left: 15px; width: 290px; height: 190px; background: var(--blush-soft); border-radius: 8px; z-index: 2; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--navy-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .hidden-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; margin: 0; color: var(--navy-dark); letter-spacing: 1px; }
+        
+        /* --- ANIMATION STATES --- */
+        .open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .open .wax-seal { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        .open .hidden-card { transform: translateY(-160px) scale(1.05); z-index: 5; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+        .fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* --- MAIN CONTENT LAYOUT --- */
         #main-content { position: relative; z-index: 2; padding-top: 60px; opacity: 0; transition: opacity 1.2s ease-in-out; }
         #main-content.visible { opacity: 1; }
         
-        /* Typography & Structure */
-        h1.main-title { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--blush-pink); margin: 15px 0; letter-spacing: 2px; font-weight: 400; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .subtitle { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; color: var(--rose-gold); letter-spacing: 1px; }
+        h1.main-title { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--blush-pink); margin: 15px 0; letter-spacing: 2px; font-weight: 400; }
+        .subtitle { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; color: var(--rose-gold); }
         .ornament { color: var(--rose-gold); font-size: 14px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .ornament-line { width: 70px; height: 1px; background: var(--rose-gold); opacity: 0.5; }
         .ring-float { font-size: 34px; display: inline-block; animation: float 3s ease-in-out infinite; margin: 10px 0; }
         
-        /* Quote Section (Blush Background Accent) */
         .quote-section { padding: 50px 20px; background: rgba(15, 45, 82, 0.5); margin: 40px 0; border-top: 1px solid rgba(248, 215, 218, 0.2); border-bottom: 1px solid rgba(248, 215, 218, 0.2); }
         .quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 28px; color: var(--blush-pink); max-width: 750px; margin: 0 auto; line-height: 1.4; }
-        .invite-text { max-width: 600px; margin: 20px auto 0; font-weight: 300; font-size: 14px; line-height: 1.8; color: var(--blush-soft); letter-spacing: 0.5px; }
         
-        /* Cards Grid */
         .details-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin: 50px 0; padding: 0 10px; }
         .detail-card { background: var(--navy-card); border: 1px solid rgba(248, 215, 218, 0.2); padding: 40px 25px; width: 260px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: all 0.3s ease; }
-        .detail-card:hover { transform: translateY(-5px); border-color: var(--blush-pink); box-shadow: 0 15px 35px rgba(248, 215, 218, 0.1); }
+        .detail-card:hover { transform: translateY(-5px); border-color: var(--blush-pink); }
         .card-icon { font-size: 34px; margin-bottom: 15px; }
-        .detail-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--rose-gold); margin: 0 0 15px 0; font-size: 24px; letter-spacing: 1px; }
-        .card-main { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0 0 5px 0; color: var(--blush-pink); }
-        .card-sub { font-size: 13px; color: var(--blush-soft); opacity: 0.8; margin: 0; letter-spacing: 1px; }
+        .detail-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--rose-gold); margin: 0 0 15px 0; font-size: 24px; }
+        .card-main { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0; color: var(--blush-pink); }
         
-        /* Map Button */
-        .maps-btn { display: inline-block; margin-top: 20px; background: transparent; border: 1px solid var(--blush-pink); color: var(--blush-pink); padding: 9px 26px; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all 0.3s; letter-spacing: 0.5px; }
+        .maps-btn { display: inline-block; margin-top: 20px; background: transparent; border: 1px solid var(--blush-pink); color: var(--blush-pink); padding: 9px 26px; text-decoration: none; border-radius: 8px; font-size: 13px; transition: all 0.3s; }
         .maps-btn:hover { background: var(--blush-pink); color: var(--navy-dark); }
         
-        /* RSVP Section */
         .rsvp-section { padding: 60px 20px; background: rgba(15, 45, 82, 0.7); border-top: 1px solid rgba(248, 215, 218, 0.15); }
-        .rsvp-section h2 { font-family: 'Cormorant Garamond', serif; color: var(--blush-pink); font-size: 40px; margin: 0 0 10px 0; font-weight: 400; letter-spacing: 1px; }
+        .rsvp-section h2 { font-family: 'Cormorant Garamond', serif; color: var(--blush-pink); font-size: 40px; margin: 0 0 10px 0; }
         .rsvp-form-element { max-width: 420px; margin: 35px auto 0; }
         .form-group { margin-bottom: 22px; }
-        .form-group input, .form-group select { width: 100%; padding: 15px; background: var(--navy-dark); border: 1px solid rgba(248, 215, 218, 0.3); color: var(--blush-pink); border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: 'Montserrat', sans-serif; transition: border-color 0.3s; }
-        .form-group input:focus, .form-group select:focus { border-color: var(--blush-pink); outline: none; }
-        .form-group input::placeholder { color: rgba(248, 215, 218, 0.4); }
+        .form-group input, .form-group select { width: 100%; padding: 15px; background: var(--navy-dark); border: 1px solid rgba(248, 215, 218, 0.3); color: var(--blush-pink); border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         
-        .submit-btn { background: var(--blush-pink); color: var(--navy-dark); border: none; padding: 15px 40px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; transition: all 0.3s; letter-spacing: 1px; }
-        .submit-btn:hover { background: var(--blush-soft); transform: translateY(-1px); }
-        
-        /* Footer */
-        .main-footer { padding: 60px 20px; font-size: 12px; color: var(--blush-pink); opacity: 0.6; font-weight: 300; }
+        .submit-btn { background: var(--blush-pink); color: var(--navy-dark); border: none; padding: 15px 40px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; transition: all 0.3s; }
+        .submit-btn:hover { background: var(--blush-soft); }
+        .main-footer { padding: 60px 20px; font-size: 12px; color: var(--blush-pink); opacity: 0.6; }
 
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -93,25 +91,31 @@
     </style>
 </head>
 <body>
-    <!-- Real Royalty Wedding March Instrumental Music (No Games Style) -->
+
     <audio id="bg-music" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-wedding-march-2826.mp3" type="audio/mpeg">
+        <source src="./wedding.mp3" type="audio/mpeg">
     </audio>
 
     <button id="music-toggle" class="music-btn">🎵</button>
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Luxury Interactive Wedding Folder -->
-    <div id="envelope-container">
-        <div class="wedding-envelope">
-            <div class="envelope-seal">F&H</div>
-            <h2>Farah & Hammam</h2>
-            <p>ENGAGEMENT INVITATION</p>
-            <div class="click-to-open pulse">Click to Open</div>
+    <!-- Luxury 3D Opening Envelope Screen -->
+    <div id="envelope-screen">
+        <div class="envelope-wrapper" id="envelopeInteractive">
+            <div class="envelope-flap"></div>
+            <div class="wax-seal">F&H</div>
+            <div class="envelope-pocket">
+                <div class="pocket-text">Farah & Hammam</div>
+                <div class="click-hint pulse">Tap to Open</div>
+            </div>
+            <div class="hidden-card">
+                <h3>You Are Invited</h3>
+                <p style="font-size: 12px; font-weight:600; letter-spacing:1px; margin-top:5px;">TAP AGAIN</p>
+            </div>
         </div>
     </div>
 
-    <!-- Main Invitation Content -->
+    <!-- Main Content -->
     <div id="main-content" class="hidden">
         <header class="hero-section">
             <div class="container">
@@ -125,7 +129,6 @@
         <section class="quote-section">
             <div class="container">
                 <p class="quote">"In a world full of temporary things, we found something real."</p>
-                <p class="invite-text">With love in our hearts, we invite you to celebrate our engagement with us.</p>
             </div>
         </section>
 
@@ -136,19 +139,16 @@
                         <div class="card-icon">📅</div>
                         <h3>The Date</h3>
                         <p class="card-main">16 / 7 / 2026</p>
-                        <p class="card-sub">Thursday</p>
                     </div>
                     <div class="detail-card">
                         <div class="card-icon">⏰</div>
                         <h3>The Time</h3>
                         <p class="card-main">5:00 PM</p>
-                        <p class="card-sub">Cairo Time</p>
                     </div>
                     <div class="detail-card">
                         <div class="card-icon">📍</div>
                         <h3>The Venue</h3>
                         <p class="card-main">Helnan Palestine</p>
-                        <p class="card-sub">El-Montaza, Alexandria</p>
                         <a href="https://www.google.com/maps/place/helnan+palestine+hotel/" target="_blank" class="maps-btn">View Map</a>
                     </div>
                 </div>
@@ -158,7 +158,6 @@
         <section class="rsvp-section">
             <div class="container">
                 <h2>Are You Coming?</h2>
-                <p style="color: var(--rose-gold); font-size: 14px;">Please confirm your attendance</p>
                 <form id="rsvp-form" class="rsvp-form-element">
                     <div class="form-group"><input type="text" placeholder="Your Full Name" required></div>
                     <div class="form-group">
@@ -168,7 +167,6 @@
                             <option value="no">Regretfully Decline</option>
                         </select>
                     </div>
-                    <div class="form-group"><input type="number" min="1" max="5" placeholder="Number of Guests" required></div>
                     <button type="submit" class="submit-btn">Send RSVP</button>
                 </form>
             </div>
@@ -180,29 +178,40 @@
     </div>
 
     <script>
-        document.getElementById('envelope-container').addEventListener('click', function() {
-            this.style.opacity = '0';
-            setTimeout(() => {
-                this.classList.add('hidden');
-                const content = document.getElementById('main-content');
-                content.classList.remove('hidden');
-                setTimeout(() => { content.classList.add('visible'); }, 50);
-                
-                document.getElementById('music-toggle').style.display = 'block';
-                const bgMusic = document.getElementById('bg-music');
+        const envelope = document.getElementById('envelopeInteractive');
+        const screen = document.getElementById('envelope-screen');
+        const content = document.getElementById('main-content');
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        let clickCount = 0;
+
+        envelope.addEventListener('click', function(e) {
+            e.stopPropagation();
+            clickCount++;
+            
+            if (clickCount === 1) {
+                // الكليكة الأولى: الجواب يفتح والكارت يطلع لفوق والمزيكا تشتعل فوراً
+                envelope.classList.add('open');
                 if (bgMusic) {
-                    bgMusic.play().catch(e => console.log("Audio play caught:", e));
+                    bgMusic.play().catch(err => console.log("Playback blocked:", err));
                 }
-            }, 800);
+            } else if (clickCount === 2) {
+                // الكليكة التانية: الشاشة تختفي بـ Fade راقي والدعوة الكاملة تظهر
+                screen.classList.add('fade-out');
+                content.classList.remove('hidden');
+                setTimeout(() => { 
+                    content.classList.add('visible'); 
+                    musicToggle.style.display = 'block';
+                }, 100);
+            }
         });
 
-        document.getElementById('music-toggle').addEventListener('click', function(e) {
+        musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
-            const bgMusic = document.getElementById('bg-music');
             if (bgMusic.paused) { bgMusic.play(); } else { bgMusic.pause(); }
         });
 
-        // Background Gentle Dust Particles
+        // Background Particles
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
