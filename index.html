@@ -4,54 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farah & Hammam Engagement Invitation</title>
-    <!-- Combined Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=400;600;700&family=Great+Vibes&family=Montserrat:wght=300;400;600&family=Playfair+Display:ital,wght=0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <!-- Rabt el-Theme el-Asly Direct -->
-    <link rel="stylesheet" href="https://marwansameh2121.github.io/marwan/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=400;600;700&family=Montserrat:wght=300;400;600&family=Playfair+Display:ital,wght=0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
-        /* Custom Overrides to Ensure Compatibility */
-        body { margin: 0; padding: 0; background-color: #0b1320; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
-        #main-content.hidden { display: none !important; }
-        #envelope-container.hidden { display: none !important; }
+        /* Base Styling & Dark Luxury Theme */
+        body { margin: 0; padding: 0; background-color: #0b121f; color: #ffffff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; text-align: center; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Background Particle Canvas */
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        
+        /* Music Control */
+        .music-btn { position: fixed; top: 20px; right: 20px; z-index: 999; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,215,0,0.4); color: white; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 20px; display: none; }
+        
+        /* Envelope Section */
+        #envelope-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b121f; z-index: 100; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: opacity 0.8s ease; }
+        .envelope { width: 320px; height: 220px; background: #1a2639; border: 2px solid #dfb76c; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); position: relative; transition: transform 0.5s ease; }
+        .envelope:hover { transform: scale(1.05); }
+        .envelope-content { color: #dfb76c; font-family: 'Cinzel', serif; }
+        .envelope-content h2 { font-size: 32px; margin: 0; letter-spacing: 2px; }
+        .envelope-content p { font-size: 13px; margin-top: 10px; opacity: 0.9; color: #ffffff; }
+        
+        /* Main Layout Control */
+        .hidden { display: none !important; }
+        #main-content { position: relative; z-index: 2; padding-top: 60px; opacity: 0; transition: opacity 1s ease; }
+        #main-content.visible { opacity: 1; }
+        
+        /* Typography & Structure */
+        h1.main-title { font-family: 'Cinzel', serif; font-size: 42px; color: #dfb76c; margin: 20px 0; letter-spacing: 3px; }
+        .subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; color: #a4b3c6; }
+        .ornament { color: #dfb76c; font-size: 14px; margin: 15px 0; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .ornament-line { width: 50px; height: 1px; background: #dfb76c; opacity: 0.5; }
+        .ring-float { font-size: 30px; display: inline-block; animation: float 3s ease-in-out infinite; margin: 15px 0; }
+        
+        /* Quote */
+        .quote-section { padding: 40px 20px; background: rgba(26, 38, 57, 0.4); margin: 40px 0; border-top: 1px solid rgba(223,183,108,0.2); border-bottom: 1px solid rgba(223,183,108,0.2); }
+        .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: #dfb76c; max-width: 700px; margin: 0 auto; }
+        .invite-text { max-width: 600px; margin: 20px auto 0; font-weight: 300; line-height: 1.6; color: #e2e8f0; }
+        
+        /* Cards Grid */
+        .details-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin: 50px 0; padding: 0 10px; }
+        .detail-card { background: #1a2639; border: 1px solid rgba(223,183,108,0.3); padding: 30px; width: 260px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .detail-card:hover { transform: translateY(-5px); border-color: #dfb76c; }
+        .card-icon { font-size: 35px; margin-bottom: 15px; }
+        .detail-card h3 { font-family: 'Cinzel', serif; color: #dfb76c; margin: 0 0 15px 0; font-size: 18px; }
+        .card-main { font-size: 22px; font-weight: 600; margin: 0 0 5px 0; color: #ffffff; }
+        .card-sub { font-size: 14px; color: #a4b3c6; margin: 0; }
+        
+        /* Buttons */
+        .maps-btn { display: inline-block; margin-top: 15px; background: transparent; border: 1px solid #dfb76c; color: #dfb76c; padding: 8px 20px; text-decoration: none; border-radius: 4px; font-size: 13px; transition: all 0.3s; }
+        .maps-btn:hover { background: #dfb76c; color: #0b121f; }
+        
+        /* RSVP Section */
+        .rsvp-section { padding: 60px 20px; background: rgba(26, 38, 57, 0.6); }
+        .rsvp-section h2 { font-family: 'Cinzel', serif; color: #dfb76c; font-size: 32px; margin: 0 0 10px 0; }
+        .rsvp-form-element { max-width: 450px; margin: 30px auto 0; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0b121f; border: 1px solid rgba(223,183,108,0.4); color: white; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { border-color: #dfb76c; outline: none; }
+        .submit-btn { background: #dfb76c; color: #0b121f; border: none; padding: 12px 40px; font-size: 16px; font-weight: 600; border-radius: 4px; cursor: pointer; width: 100%; transition: opacity 0.3s; }
+        .submit-btn:hover { opacity: 0.9; }
+        
+        /* Footer */
+        .main-footer { padding: 40px 20px; font-size: 12px; color: #a4b3c6; opacity: 0.7; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .pulse { animation: float 2s infinite; }
     </style>
 </head>
 <body>
-    <!-- Background Music (Linked to your song.mp3) -->
     <audio id="bg-music" loop>
         <source src="./song.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Music Control Button -->
-    <button id="music-toggle" class="music-btn hidden" style="display: block !important;">
-        <span class="icon">🎵</span>
-    </button>
-
-    <!-- Canvas for Particle Background -->
+    <button id="music-toggle" class="music-btn">🎵</button>
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Section 1: The Interactive Envelope -->
-    <div id="envelope-container" class="active">
-        <div class="envelope-wrapper">
-            <div class="envelope">
-                <div class="front"></div>
-                <div class="top-flap"></div>
-                <div class="letter">
-                    <div class="letter-content">
-                        <div class="initials">F & H</div>
-                        <p class="welcome-text">We Cordially Invite You To Our Engagement</p>
-                        <p class="tap-instruction">Tap to Open</p>
-                    </div>
-                </div>
+    <!-- The Envelope: Click to open everything -->
+    <div id="envelope-container">
+        <div class="envelope">
+            <div class="envelope-content">
+                <h2>F & H</h2>
+                <p>Engagement Invitation</p>
+                <p class="pulse" style="color: #dfb76c; font-weight: bold; margin-top: 25px; letter-spacing: 1px;">✉️ CLICK TO OPEN ✉️</p>
             </div>
         </div>
     </div>
 
-    <!-- Main Content Container -->
+    <!-- Main Content -->
     <div id="main-content" class="hidden">
-        <!-- Hero Section -->
         <header class="hero-section">
-            <div class="hero-overlay"></div>
-            <div class="hero-text animate-fade-in">
+            <div class="container">
                 <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">♦</div><div class="ornament-line"></div></div>
                 <h1 class="main-title">Farah & Hammam</h1>
                 <span class="ring-float">💍</span>
@@ -59,162 +105,113 @@
             </div>
         </header>
 
-        <!-- Quote Section -->
-        <section class="quote-section text-center">
+        <section class="quote-section">
             <div class="container">
                 <p class="quote">"In a world full of temporary things, we found something real."</p>
-                <div class="mini-divider"></div>
                 <p class="invite-text">With love in our hearts, we invite you to celebrate our engagement with us.</p>
             </div>
         </section>
 
-        <!-- Details Grid Section -->
         <section class="details-section">
             <div class="container">
                 <div class="details-grid">
-                    <!-- Date Card -->
                     <div class="detail-card">
                         <div class="card-icon">📅</div>
                         <h3>The Date</h3>
                         <p class="card-main">16 / 7 / 2026</p>
                         <p class="card-sub">Thursday</p>
                     </div>
-
-                    <!-- Time Card -->
                     <div class="detail-card">
                         <div class="card-icon">⏰</div>
                         <h3>The Time</h3>
                         <p class="card-main">5:00 PM</p>
                         <p class="card-sub">Cairo Time</p>
                     </div>
-
-                    <!-- Venue Card -->
                     <div class="detail-card">
                         <div class="card-icon">📍</div>
                         <h3>The Venue</h3>
                         <p class="card-main">Helnan Palestine</p>
                         <p class="card-sub">El-Montaza, Alexandria</p>
-                        <a href="https://www.google.com/maps/place/helnan+palestine+hotel/data=!4m2!3m1!1s0x14f5d061fc11582d:0x12657103d509ea6c?sa=X&ved=1t:242&ictx=111" target="_blank" class="maps-btn">View Map</a>
+                        <a href="https://www.google.com/maps/place/helnan+palestine+hotel/" target="_blank" class="maps-btn">View Map</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- RSVP Form Section -->
         <section class="rsvp-section">
-            <div class="container text-center">
+            <div class="container">
                 <h2>Are You Coming?</h2>
                 <p>Please confirm your attendance</p>
-                
-                <form id="rsvp-form" action="https://formspree.io/f/your_id_here" method="POST" class="rsvp-form-element">
+                <form id="rsvp-form" class="rsvp-form-element">
+                    <div class="form-group"><input type="text" placeholder="Your Full Name" required></div>
                     <div class="form-group">
-                        <input type="text" name="name" placeholder="Your Full Name" required>
-                    </div>
-                    <div class="form-group">
-                        <select name="attendance" required>
+                        <select required>
                             <option value="" disabled selected>Will you attend?</option>
                             <option value="yes">Joyfully Accept</option>
                             <option value="no">Regretfully Decline</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <input type="number" name="guests" min="1" max="5" placeholder="Number of Guests" required>
-                    </div>
+                    <div class="form-group"><input type="number" min="1" max="5" placeholder="Number of Guests" required></div>
                     <button type="submit" class="submit-btn">Send RSVP</button>
                 </form>
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="main-footer">
             <p>Made with ❤️ for Farah & Hammam</p>
         </footer>
     </div>
 
-    <!-- Self-Contained Script to handle interactivity -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const envelopeContainer = document.getElementById('envelope-container');
-            const mainContent = document.getElementById('main-content');
-            const bgMusic = document.getElementById('bg-music');
-            const musicToggle = document.getElementById('music-toggle');
-
-            // Handle Envelope Click
-            if (envelopeContainer) {
-                envelopeContainer.addEventListener('click', () => {
-                    const wrapper = envelopeContainer.querySelector('.envelope-wrapper');
-                    if (wrapper) wrapper.classList.add('open');
-                    
-                    setTimeout(() => {
-                        envelopeContainer.classList.add('hidden');
-                        if (mainContent) {
-                            mainContent.classList.remove('hidden');
-                            mainContent.classList.add('animate-fade-in');
-                        }
-                        
-                        // Try to play music automatically on open
-                        if (bgMusic) {
-                            bgMusic.play().catch(error => console.log("Audio autoplay blocked:", error));
-                        }
-                    }, 1200);
-                });
-            }
-
-            // Handle Music Toggle Button
-            if (musicToggle && bgMusic) {
-                musicToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (bgMusic.paused) {
-                        bgMusic.play();
-                        musicToggle.style.opacity = "1";
-                    } else {
-                        bgMusic.pause();
-                        musicToggle.style.opacity = "0.6";
-                    }
-                });
-            }
-
-            // Simple Particle Background Canvas Effect
-            const canvas = document.getElementById('particle-canvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                let particles = [];
+        document.getElementById('envelope-container').addEventListener('click', function() {
+            // Hide envelope with fade
+            this.style.opacity = '0';
+            setTimeout(() => {
+                this.classList.add('hidden');
                 
-                function resize() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
+                // Show Main Content
+                const content = document.getElementById('main-content');
+                content.classList.remove('hidden');
+                setTimeout(() => { content.classList.add('visible'); }, 50);
+                
+                // Show Music Button
+                document.getElementById('music-toggle').style.display = 'block';
+                
+                // Play Background Music
+                const bgMusic = document.getElementById('bg-music');
+                if (bgMusic) {
+                    bgMusic.play().catch(e => console.log("Audio autoplay blocked by browser:", e));
                 }
-                window.addEventListener('resize', resize);
-                resize();
-
-                for(let i=0; i<50; i++) {
-                    particles.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        radius: Math.random() * 2 + 1,
-                        density: Math.random() * 1 + 0.5
-                    });
-                }
-
-                function draw() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)'; // Gold dust particles
-                    ctx.beginPath();
-                    for(let i=0; i<particles.length; i++) {
-                        let p = particles[i];
-                        ctx.moveTo(p.x, p.y);
-                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2, true);
-                        p.y -= p.density * 0.5;
-                        if(p.y < 0) {
-                            particles[i] = { x: Math.random() * canvas.width, y: canvas.height, radius: p.radius, density: p.density };
-                        }
-                    }
-                    ctx.fill();
-                    requestAnimationFrame(draw);
-                }
-                draw();
-            }
+            }, 800);
         });
+
+        // Music Control Button Toggle
+        document.getElementById('music-toggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic.paused) { bgMusic.play(); } else { bgMusic.pause(); }
+        });
+
+        // Background Particles
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize); resize();
+            for(let i=0; i<45; i++) { particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, d: Math.random()*0.4+0.2 }); }
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(223, 183, 108, 0.4)';
+                ctx.beginPath();
+                for(let i=0; i<particles.length; i++) {
+                    let p = particles[i]; ctx.moveTo(p.x, p.y); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+                    p.y -= p.d; if(p.y < 0) particles[i] = { x: Math.random()*canvas.width, y: canvas.height, r: p.r, d: p.d };
+                }
+                ctx.fill(); requestAnimationFrame(draw);
+            }
+            draw();
+        }
     </script>
 </body>
 </html>
