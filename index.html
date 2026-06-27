@@ -86,4 +86,272 @@
         .detail-label { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem; }
         .detail-value { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.25rem; }
         
-        .map-link { display: inline-block; margin-top: 1.5rem; padding: 0.9rem 3rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border
+        .map-link { display: inline-block; margin-top: 1.5rem; padding: 0.9rem 3rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 8px; text-decoration: none; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .map-link:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(248,215,218,0.25); }
+
+        .rsvp-card { background: rgba(15, 45, 82, 0.4); border: 1px solid rgba(248,215,218,0.15); border-radius: 12px; padding: 2.5rem; text-align: center; margin-top: 2rem; }
+        .btn-rsvp { display: inline-block; padding: 0.9rem 3.5rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .btn-rsvp:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(248,215,218,0.25); }
+        .rsvp-confirmed { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1.2rem; padding: 0.9rem 2.5rem; border: 1px solid rgba(248,215,218,0.35); border-radius: 8px; display: inline-block; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(7,29,57,0.85); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1.2rem; backdrop-filter: blur(4px); }
+        .modal-overlay.show { display: flex; }
+        .modal-box { background: linear-gradient(160deg, #0F2D52 0%, #071D39 100%); border: 1px solid rgba(248,215,218,0.25); border-radius: 16px; padding: 2.4rem 2rem; max-width: 380px; width: 100%; text-align: center; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+        .modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: rgba(247,238,223,0.5); font-size: 1.2rem; cursor: pointer; }
+        .modal-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.4rem; margin-bottom: 1.6rem; }
+        .modal-input { width: 100%; padding: 0.8rem 1rem; margin-bottom: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(248,215,218,0.25); border-radius: 8px; color: var(--cream); font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; outline: none; }
+        .modal-label { display: block; text-align: left; font-family: 'Cormorant Garamond', serif; color: rgba(248,215,218,0.7); font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .modal-msg { font-family: 'Cormorant Garamond', serif; color: #ff9a9a; font-style: italic; font-size: 0.9rem; min-height: 1.2rem; }
+        
+        @media (max-width: 540px) {
+            .env-wrapper { width: 320px; height: 218px; }
+            .wax-seal { width: 60px; height: 60px; }
+            .details-grid { grid-template-columns: 1fr; }
+            #vinyl-wrapper { top: 12px; right: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars-canvas"></canvas>
+    
+    <audio id="bgMusic" src="wedding.mp3.mp3" loop preload="auto"></audio>
+
+    <div id="vinyl-wrapper" onclick="toggleMusic()" title="Play / Pause">
+        <div class="vinyl-disc" id="vinylDisc">
+            <div class="vinyl-label"><span>F&H</span></div>
+        </div>
+        <div class="vinyl-needle"></div>
+        <div class="vinyl-icon" id="vinylIcon">▶ play</div>
+    </div>
+
+    <div id="envelope-screen">
+        <p class="hint">✦   tap to open   ✦</p>
+        <div class="env-wrapper" id="envelope" onclick="openEnvelope()">
+            <div class="env-body"></div>
+            <div class="letter-inner"></div>
+            <div class="env-flap"></div>
+            <div class="wax-seal">
+                <div class="seal-disc">
+                    <div class="seal-label">F<br>&<br>H</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="invite-page">
+        <div class="invite-inner">
+            
+            <div class="reveal" id="r1" style="text-align:center;">
+                <p class="eyebrow">With love in our hearts, we invite you to celebrate with us</p>
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
+                <div class="hero-names">Farah <span class="and-word">&</span> Hammam</div>
+                <span class="ring-float">💍</span>
+                <p class="hero-sub">Meet us at the start of our forever</p>
+            </div>
+
+            <div class="reveal" id="r2">
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
+                <div class="romantic-box">
+                    <p class="romantic-quote">
+                        "In a world full of temporary things,<br>we found something real."
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal" id="r3">
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
+                <p class="section-title">The Details</p>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <p class="detail-label">📅 Date</p>
+                        <p class="detail-value">16 / 7 / 2026</p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">⏰ Time</p>
+                        <p class="detail-value">5:00 PM</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item" style="margin-top: 16px;">
+                    <p class="detail-label">📍 Venue</p>
+                    <p class="detail-value" style="font-size: 1.4rem; font-weight: 600;">Helnan Palace</p>
+                    <a class="map-link" href="https://maps.google.com/?q=Helnan+Palestine+Hotel+Alexandria" target="_blank" rel="noopener">Open in Maps 🧭</a>
+                </div>
+            </div>
+
+            <div class="reveal" id="r4">
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
+                <div class="rsvp-card">
+                    <p class="rsvp-note" style="margin-bottom: 1.5rem;">We would be honored by your presence</p>
+                    <div id="rsvpActionArea">
+                        <button class="btn-rsvp" onclick="openRsvpModal()">RSVP Here ✦</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal" id="rFooter">
+                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
+                <div class="footer-sig">Farah x Hammam</div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="rsvpModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeRsvpModal()">✕</button>
+            <h3 class="modal-title">Kindly Respond</h3>
+            <label class="modal-label" for="guestName">Your Full Name</label>
+            <input type="text" id="guestName" class="modal-input" placeholder="e.g., Ahmed Ali" autocomplete="off">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem;">
+                <button class="btn-rsvp" style="padding: 0.8rem 0; width: 100%; font-size: 0.9rem;" onclick="submitRsvp(true)">Accepts 💍</button>
+                <button class="btn-rsvp" style="padding: 0.8rem 0; width: 100%; font-size: 0.9rem; background: linear-gradient(135deg, #333, #111); color: #ccc;" onclick="submitRsvp(false)">Regrets ✨</button>
+            </div>
+            <p id="modalErrorMsg" class="modal-msg"></p>
+        </div>
+    </div>
+
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const vinylWrapper = document.getElementById('vinyl-wrapper');
+        const vinylDisc = document.getElementById('vinylDisc');
+        const vinylIcon = document.getElementById('vinylIcon');
+        const envelopeScreen = document.getElementById('envelope-screen');
+        const envelope = document.getElementById('envelope');
+        const invitePage = document.getElementById('invite-page');
+        
+        let musicStarted = false;
+
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 95; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 1.3 + 0.3,
+                twinkleSpeed: Math.random() * 0.03 + 0.007,
+                phase: Math.random() * Math.PI
+            });
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#F8D7DA';
+            stars.forEach(star => {
+                star.phase += star.twinkleSpeed;
+                ctx.globalAlpha = 0.2 + (Math.sin(star.phase) + 1) * 0.4;
+                ctx.beginPath(); ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2); ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        function toggleMusic() {
+            if (!musicStarted) return;
+            if (bgMusic.paused) {
+                bgMusic.play().catch(err => console.log("Audio blocked"));
+                vinylWrapper.classList.add('playing');
+                vinylDisc.classList.add('spinning');
+                vinylIcon.innerText = "⏸ pause";
+            } else {
+                bgMusic.pause();
+                vinylWrapper.classList.remove('playing');
+                vinylDisc.classList.remove('spinning');
+                vinylIcon.innerText = "▶ play";
+            }
+        }
+
+        function openEnvelope() {
+            if (envelope.classList.contains('opening')) return;
+            envelope.classList.add('opening');
+            
+            bgMusic.play().then(() => {
+                musicStarted = true;
+                vinylWrapper.classList.add('visible', 'playing');
+                vinylDisc.classList.add('spinning');
+                vinylIcon.innerText = "⏸ pause";
+            }).catch(err => {
+                musicStarted = true;
+                vinylWrapper.classList.add('visible');
+                vinylIcon.innerText = "▶ play";
+            });
+
+            setTimeout(triggerConfettiBurst, 350);
+            setTimeout(spawnRosePetalsLoop, 700);
+
+            setTimeout(() => {
+                envelopeScreen.classList.add('away');
+                invitePage.classList.add('visible');
+                triggerScrollReveal();
+            }, 1450);
+        }
+
+        function triggerConfettiBurst() {
+            const colors = ['#DCA29A', '#F8D7DA', '#FCEFF1', '#ffffff'];
+            for (let i = 0; i < 70; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.width = Math.random() * 7 + 4 + 'px';
+                conf.style.height = Math.random() * 10 + 5 + 'px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = Math.random() * 2 + 1.8 + 's';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 3800);
+            }
+        }
+
+        function spawnRosePetalsLoop() {
+            setInterval(() => {
+                if (document.hidden) return; 
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.backgroundColor = '#F8D7DA';
+                const dimension = Math.random() * 10 + 10;
+                petal.style.width = dimension + 'px';
+                petal.style.height = (dimension * 1.3) + 'px';
+                petal.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+                petal.style.setProperty('--spin', (Math.random() * 540 + 180) + 'deg');
+                petal.style.animationDuration = Math.random() * 4 + 4.5 + 's';
+                document.body.appendChild(petal);
+                setTimeout(() => petal.remove(), 8500);
+            }, 380);
+        }
+
+        function triggerScrollReveal() {
+            const elements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('shown');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            elements.forEach(el => observer.observe(el));
+        }
+
+        function openRsvpModal() { document.getElementById('rsvpModal').classList.add('show'); document.getElementById('modalErrorMsg').innerText = ""; }
+        function closeRsvpModal() { document.getElementById('rsvpModal').classList.remove('show'); }
+
+        function submitRsvp(isAttending) {
+            const nameInput = document.getElementById('guestName').value.trim();
+            if (!nameInput) { document.getElementById('modalErrorMsg').innerText = "Please write your name."; return; }
+            closeRsvpModal(); triggerConfettiBurst();
+            const actionArea = document.getElementById('rsvpActionArea');
+            if (isAttending) {
+                actionArea.innerHTML = `<span class="rsvp-confirmed">✨ Thank you, ${nameInput}! See you there!</span>`;
+            } else {
+                actionArea.innerHTML = `<span class="rsvp-confirmed" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.4);">Thank you for wishing us well! ✨</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
