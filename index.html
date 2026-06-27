@@ -6,7 +6,7 @@
     <title>Farah & Hammam 💍</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght=0,300;0,400;0,600;1,400&family=Dancing+Script:wght=600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -14,7 +14,6 @@
             --cream: #FCEFF1; 
             --gold: #DCA29A; /* Rose Gold */
             --gold-light: #F8D7DA; /* Blush Pink */
-            --deep-red: #DCA29A; 
             --bg-dark: #071D39; /* Navy Dark */
             --bg-mid: #0F2D52; /* Navy Card */
             --env-body: #0F2D52; 
@@ -26,561 +25,65 @@
         
         #vinyl-wrapper { position: fixed; top: 18px; right: 18px; z-index: 600; opacity: 0; transform: scale(0.5) rotate(-20deg); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.4,0.64,1); cursor: pointer; }
         #vinyl-wrapper.visible { opacity: 1; transform: scale(1) rotate(0deg); }
-        .vinyl-disc { width: 78px; height: 78px; border-radius: 50%; background: radial-gradient(circle, #DCA29A 0%, #a87c2a 8%, #7a5c1a 10%, #0f0f0f 11%, #1e1e1e 15%, #0f0f0f 16%, #1e1e1e 22%, #0f0f0f 23%, #1e1e1e 30%, #0f0f0f 31%, #1e1e1e 39%, #0f0f0f 40%, #1e1e1e 50%, #0f0f0f 51%, #1e1e1e 62%, #0f0f0f 63%, #1e1e1e 76%, #0f0f0f 77%, #0a0a0a 100%); box-shadow: 0 6px 28px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04), inset 0 2px 4px rgba(255,255,255,0.04); animation: vinylSpin 2.2s linear infinite; animation-play-state: paused; position: relative; transition: box-shadow 0.3s ease; }
-        .vinyl-disc:hover { box-shadow: 0 8px 35px rgba(220,162,154,0.35), 0 0 0 1px rgba(220,162,154,0.2); }
+        .vinyl-disc { width: 78px; height: 78px; border-radius: 50%; background: radial-gradient(circle, #DCA29A 0%, #a87c2a 8%, #7a5c1a 10%, #0f0f0f 11%, #1e1e1e 15%, #0f0f0f 16%, #1e1e1e 22%, #0f0f0f 23%, #1e1e1e 30%, #0f0f0f 31%, #1e1e1e 39%, #0f0f0f 40%, #1e1e1e 50%, #0f0f0f 51%, #1e1e1e 62%, #0f0f0f 63%, #1e1e1e 76%, #0f0f0f 77%, #0a0a0a 100%); box-shadow: 0 6px 28px rgba(0,0,0,0.65), inset 0 2px 4px rgba(255,255,255,0.04); animation: vinylSpin 2.2s linear infinite; animation-play-state: paused; position: relative; }
         .vinyl-disc.spinning { animation-play-state: running; }
         @keyframes vinylSpin { to { transform: rotate(360deg); } }
-        .vinyl-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #F8D7DA, #DCA29A 50%, #8b6014); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
-        .vinyl-label span { font-family: 'Playfair Display', serif; font-size: 5.5px; color: #071D39; font-weight: 700; letter-spacing: 0.3px; line-height: 1.2; text-align: center; }
+        .vinyl-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #F8D7DA, #DCA29A 50%, #8b6014); display: flex; align-items: center; justify-content: center; }
+        .vinyl-label span { font-family: 'Playfair Display', serif; font-size: 5.5px; color: #071D39; font-weight: 700; text-align: center; }
         .vinyl-needle { position: absolute; top: 2px; right: -14px; width: 34px; height: 2.5px; background: linear-gradient(to left, #888, #ddd, #aaa); transform-origin: right center; transform: rotate(20deg); border-radius: 2px; transition: transform 0.6s ease; }
         .vinyl-needle::before { content: ''; position: absolute; right: -1px; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #ccc, #888); }
-        .vinyl-needle::after { content: ''; position: absolute; left: 0; top: -1px; width: 5px; height: 4px; background: #c0a020; border-radius: 1px; }
         #vinyl-wrapper:not(.playing) .vinyl-needle { transform: rotate(0deg); }
         .vinyl-icon { text-align: center; font-size: 0.6rem; color: rgba(220,162,154,0.6); letter-spacing: 1px; margin-top: 5px; font-family: 'Cormorant Garamond', serif; }
 
         #envelope-screen { position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 40%, #0F2D52 0%, var(--bg-dark) 75%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500; transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease 0.9s; }
         #envelope-screen.away { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-        .hint { font-family: 'Cormorant Garamond', serif; color: rgba(248,215,218,0.6); font-size: 0.82rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 2.8rem; animation: breathe 2.8s ease-in-out infinite; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .hint { font-family: 'Cormorant Garamond', serif; color: rgba(248,215,218,0.6); font-size: 0.82rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 2.8rem; animation: breathe 2.8s ease-in-out infinite; cursor: pointer; }
         @keyframes breathe { 0%,100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 0.9; transform: translateY(-5px); } }
 
-        .env-wrapper { position: relative; width: 420px; height: 280px; cursor: pointer; perspective: 1300px; user-select: none; -webkit-tap-highlight-color: transparent; }
-        .env-body { position: absolute; inset: 0; background: var(--env-body); border-radius: 12px; box-shadow: 0 30px 70px var(--env-shadow), 0 0 0 1px rgba(248,215,218,0.15), inset 0 1px 0 rgba(255,255,255,0.1); z-index: 1; }
-        .letter-inner { position: absolute; bottom: 8px; left: 18px; right: 18px; height: 68%; background: linear-gradient(155deg, #FCEFF1 0%, #F8D7DA 100%); border-radius: 8px; z-index: 3; transition: transform 1.05s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s; box-shadow: 0 2px 14px rgba(0,0,0,0.13); display: flex; align-items: center; justify-content: center; }
+        .env-wrapper { position: relative; width: 420px; height: 280px; cursor: pointer; perspective: 1300px; user-select: none; }
+        .env-body { position: absolute; inset: 0; background: var(--env-body); border-radius: 12px; box-shadow: 0 30px 70px var(--env-shadow), 0 0 0 1px rgba(248,215,218,0.15); z-index: 1; }
+        .letter-inner { position: absolute; bottom: 8px; left: 18px; right: 18px; height: 68%; background: linear-gradient(155deg, #FCEFF1 0%, #F8D7DA 100%); border-radius: 8px; z-index: 3; transition: transform 1.05s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s; display: flex; align-items: center; justify-content: center; }
         .letter-inner::before { content: '💍'; font-size: 2rem; opacity: 0.35; }
         .env-wrapper.opening .letter-inner { transform: translateY(-115px); }
         .env-flap { position: absolute; top: 0; left: 0; width: 100%; height: 56%; background: var(--env-flap); clip-path: polygon(0 0, 100% 0, 50% 92%); transform-origin: top center; transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.12s; z-index: 10; border-radius: 12px 12px 0 0; }
         .env-wrapper.opening .env-flap { transform: rotateX(-172deg); }
 
         .wax-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75px; height: 75px; z-index: 20; }
-        .seal-disc { width: 100%; height: 100%; background: radial-gradient(circle at 37% 30%, #FCEFF1 0%, #F8D7DA 42%, #DCA29A 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 2px 5px rgba(0,0,0,0.3), inset 0 2px 8px rgba(255,255,255,0.25); position: relative; transition: transform 0.3s ease; border: 1px solid #DCA29A; }
-        .seal-disc::before { content: ''; position: absolute; inset: 5px; border-radius: 50%; border: 1px solid rgba(7,29,57,0.15); }
-        .seal-disc::after { content: ''; position: absolute; inset: 10px; border-radius: 50%; border: 1px solid rgba(7,29,57,0.1); }
-        .seal-disc:hover { transform: scale(1.06); }
-        .seal-label { font-family: 'Playfair Display', serif; color: #071D39; font-size: 0.64rem; letter-spacing: 0.5px; text-align: center; line-height: 1.45; position: relative; z-index: 1; font-weight: bold; }
+        .seal-disc { width: 100%; height: 100%; background: radial-gradient(circle at 37% 30%, #FCEFF1 0%, #F8D7DA 42%, #DCA29A 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.4); position: relative; transition: transform 0.3s ease; border: 1px solid #DCA29A; }
+        .seal-label { font-family: 'Playfair Display', serif; color: #071D39; font-size: 0.64rem; letter-spacing: 0.5px; text-align: center; line-height: 1.45; font-weight: bold; }
         .env-wrapper.opening .wax-seal { animation: crackSeal 0.5s ease forwards; }
-        @keyframes crackSeal { 0% { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; } 25% { transform: translate(-50%,-50%) scale(1.18) rotate(9deg); } 55% { transform: translate(-50%,-50%) scale(0.8) rotate(-6deg); opacity: 0.7; } 85% { transform: translate(-50%,-50%) scale(0.4) rotate(15deg); opacity: 0.2; } 100% { transform: translate(-50%,-50%) scale(0) rotate(22deg); opacity: 0; } }
+        @keyframes crackSeal { 0% { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(0) rotate(22deg); opacity: 0; } }
 
         .confetti-piece { position: fixed; pointer-events: none; z-index: 9999; top: -20px; animation: confettiFall linear forwards; }
         @keyframes confettiFall { to { transform: translateY(110vh) rotate(760deg); opacity: 0; } }
-
         .petal { position: fixed; top: -40px; pointer-events: none; z-index: 50; border-radius: 0% 60% 0% 60%; animation: petalFall linear forwards; }
         @keyframes petalFall { to { transform: translateY(115vh) translateX(var(--drift,0px)) rotate(var(--spin,360deg)); opacity: 0.25; } }
-
-        .map-card { background: linear-gradient(135deg, #0F2D52 0%, #071D39 100%); border-radius: 14px; padding: 1.4rem; box-shadow: 0 22px 55px rgba(0,0,0,0.45); border: 2px solid rgba(248,215,218,0.2); position: relative; overflow: hidden; }
-        .map-card svg { width: 100%; height: auto; display: block; }
-        .map-link { display: inline-block; margin-top: 1.4rem; padding: 0.85rem 2.6rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 8px; text-decoration: none; transition: transform 0.25s ease, box-shadow 0.25s ease; }
-        .map-link:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(248,215,218,0.3); }
 
         #invite-page { position: relative; z-index: 1; min-height: 100vh; background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 35%, var(--bg-dark) 100%); opacity: 0; transition: opacity 1.3s ease 0.5s; }
         #invite-page.visible { opacity: 1; }
         .invite-inner { max-width: 700px; margin: 0 auto; padding: 6rem 2rem 5rem; }
         .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
         .reveal.shown { opacity: 1; transform: translateY(0); }
+        
         .ornament { display: flex; align-items: center; gap: 16px; margin: 2.5rem 0; }
         .ornament-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(248,215,218,0.3), transparent); }
         .ornament-dot { color: var(--gold); font-size: 0.65rem; opacity: 0.65; }
-        .eyebrow { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.78rem; letter-spacing: 5px; text-transform: uppercase; font-weight: 300; text-align: center; }
+        
+        .eyebrow { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 300; text-align: center; margin-bottom: 10px; }
         .hero-names { font-family: 'Dancing Script', cursive; color: var(--cream); font-size: clamp(3.8rem, 12vw, 5.8rem); line-height: 1.0; text-align: center; text-shadow: 0 0 60px rgba(248,215,218,0.15); }
         .and-word { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.9rem; display: block; margin: 0.1rem 0; }
         .ring-float { font-size: 3rem; display: block; text-align: center; margin: 1.3rem 0; animation: floatRing 4s ease-in-out infinite; }
         @keyframes floatRing { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
-        .hero-sub { text-align: center; font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.6); letter-spacing: 5px; text-transform: uppercase; margin-top: 0.8rem; }
-        .story-card { position: relative; background: rgba(255,255,255,0.02); border: 1px solid rgba(248,215,218,0.15); border-radius: 12px; padding: 2.5rem 2.8rem; overflow: hidden; }
-        .story-card::before { content: '\201C'; position: absolute; top: -35px; left: 8px; font-family: 'Playfair Display', serif; font-size: 11rem; color: rgba(248,215,218,0.05); line-height: 1; pointer-events: none; }
-        .story-text { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.85); font-size: 1.25rem; line-height: 2.05; font-style: italic; }
-        .story-text strong { color: var(--gold-light); font-style: normal; font-weight: 600; }
+        .hero-sub { text-align: center; font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.1rem; font-style: italic; letter-spacing: 1px; margin-top: 0.8rem; }
+        
+        .romantic-box { text-align: center; padding: 2rem 1rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(248,215,218,0.1); border-radius: 12px; }
+        .romantic-quote { font-family: 'Playfair Display', serif; font-style: italic; color: rgba(247,238,223,0.95); font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.85; font-weight: 400; }
+        
         .section-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.65rem; font-weight: 400; text-align: center; margin-bottom: 1.6rem; }
-        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .detail-item { background: linear-gradient(135deg, rgba(248,215,218,0.05), rgba(248,215,218,0.01)); border: 1px solid rgba(248,215,218,0.15); border-radius: 12px; padding: 1.4rem 1.7rem; }
-        .detail-label { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.72rem; letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 0.45rem; }
-        .detail-value { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.12rem; }
-        .rsvp-card { background: rgba(15, 45, 82, 0.4); border: 1px solid rgba(248,215,218,0.2); border-radius: 12px; padding: 2.8rem; text-align: center; }
-        .rsvp-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.75rem; font-weight: 400; margin-bottom: 1rem; }
-        .rsvp-note { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.65); font-size: 1.1rem; font-style: italic; line-height: 1.9; margin-bottom: 2rem; }
-        .rsvp-note strong { color: rgba(247,238,223,0.9); font-style: normal; }
-        .btn-rsvp { display: inline-block; padding: 0.9rem 3.3rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; }
-        .btn-rsvp:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(248,215,218,0.25); }
-        .btn-rsvp.clicked { background: linear-gradient(135deg, #FCEFF1, #F8D7DA); color: #071D39; cursor: default; }
-
-        .footer-sig { font-family: 'Dancing Script', cursive; color: rgba(248,215,218,0.4); font-size: 1.5rem; text-align: center; padding: 1.5rem 0 4rem; }
-        .romantic-box { text-align: center; padding: 1rem 0; }
-        .romantic-quote { font-family: 'Playfair Display', serif; font-style: italic; color: rgba(247,238,223,0.9); font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.85; font-weight: 400; }
-        .romantic-quote em { color: var(--gold-light); font-style: normal; }
-        .game-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(248,215,218,0.15); border-radius: 12px; padding: 2.2rem; text-align: center; }
-        .game-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; }
-        .game-subtitle { font-family: 'Cormorant Garamond', serif; color: rgba(247,238,223,0.5); font-size: 0.95rem; font-style: italic; margin-bottom: 2rem; }
-        .game-start-btn, .play-again-btn { display: inline-block; padding: 0.8rem 2rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; }
-        .game-start-btn:hover, .play-again-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(248,215,218,0.25); }
-
-        .guest-counter { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(248,215,218,0.1), rgba(220,162,154,0.06)); border: 1px solid rgba(248,215,218,0.3); border-radius: 30px; padding: 0.55rem 1.6rem; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--cream); letter-spacing: 1px; }
-        .guest-counter .num { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold-light); font-size: 1.2rem; }
-        .tree-wrap { text-align: center; margin: 1.5rem 0; }
-        .tree-wrap svg { width: 100%; max-width: 380px; height: auto; }
-        .tree-heart { animation: heartPop 0.5s ease backwards; transform-origin: center; }
-        @keyframes heartPop { 0% { opacity: 0; transform: scale(0); } 60% { transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
-        .tree-overflow { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(247,238,223,0.55); font-size: 0.95rem; margin-top: 0.5rem; }
-        .rsvp-confirmed { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1.2rem; font-weight: 400; padding: 0.9rem 2.5rem; border: 1px solid rgba(248,215,218,0.35); border-radius: 8px; display: inline-block; }
-
-        .modal-overlay { position: fixed; inset: 0; background: rgba(7,29,57,0.85); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1.2rem; backdrop-filter: blur(4px); }
-        .modal-overlay.show { display: flex; }
-        .modal-box { background: linear-gradient(160deg, #0F2D52 0%, #071D39 100%); border: 1px solid rgba(248,215,218,0.25); border-radius: 16px; padding: 2.4rem 2rem; max-width: 380px; width: 100%; text-align: center; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
-        .modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: rgba(247,238,223,0.5); font-size: 1.2rem; cursor: pointer; transition: color 0.2s ease; }
-        .modal-close:hover { color: var(--gold-light); }
-        .modal-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.4rem; font-weight: 400; margin-bottom: 1.6rem; }
-        .modal-input { width: 100%; padding: 0.8rem 1rem; margin-bottom: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(248,215,218,0.25); border-radius: 8px; color: var(--cream); font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; outline: none; transition: border-color 0.2s ease; }
-        .modal-input:focus { border-color: var(--gold); }
-        .modal-input::placeholder { color: rgba(247,238,223,0.35); }
-        .modal-label { display: block; text-align: left; font-family: 'Cormorant Garamond', serif; color: rgba(248,215,218,0.7); font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.4rem; }
-        .modal-msg { font-family: 'Cormorant Garamond', serif; color: #ff9a9a; font-style: italic; font-size: 0.9rem; min-height: 1.2rem; margin-top: 0.6rem; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .detail-item { background: linear-gradient(135deg, rgba(248,215,218,0.05), rgba(248,215,218,0.01)); border: 1px solid rgba(248,215,218,0.15); border-radius: 12px; padding: 1.6rem; text-align: center; transition: all 0.3s; }
+        .detail-item:hover { border-color: var(--gold); background: rgba(248,215,218,0.04); }
+        .detail-label { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .detail-value { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.25rem; }
         
-        @media (max-width: 540px) {
-            .env-wrapper { width: 320px; height: 218px; }
-            .wax-seal { width: 60px; height: 60px; }
-            .details-grid { grid-template-columns: 1fr; }
-            .story-card { padding: 1.8rem 1.5rem; }
-            .rsvp-card { padding: 2rem 1.5rem; }
-            #vinyl-wrapper { top: 12px; right: 12px; }
-        }
-    </style>
-</head>
-<body>
-    <canvas id="stars-canvas"></canvas>
-    
-    <audio id="bgMusic" src="wedding.mp3.mp3" loop preload="auto"></audio>
-
-    <div id="vinyl-wrapper" onclick="toggleMusic()" title="Play / Pause">
-        <div class="vinyl-disc" id="vinylDisc">
-            <div class="vinyl-label"><span>F&H</span></div>
-        </div>
-        <div class="vinyl-needle"></div>
-        <div class="vinyl-icon" id="vinylIcon">▶ play</div>
-    </div>
-
-    <div id="envelope-screen">
-        <p class="hint">✦   tap to open   ✦</p>
-        <div class="env-wrapper" id="envelope" onclick="openEnvelope()">
-            <div class="env-body"></div>
-            <div class="letter-inner"></div>
-            <div class="env-flap"></div>
-            <div class="wax-seal">
-                <div class="seal-disc">
-                    <div class="seal-label">F<br>&<br>H</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="invite-page">
-        <div class="invite-inner">
-            <div class="reveal" id="r1" style="text-align:center;">
-                <p class="eyebrow">You are warmly invited to celebrate the love of</p>
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="hero-names">Farah <span class="and-word">&ntilde;</span> Hammam</div>
-                <span class="ring-float">💍</span>
-                <p class="hero-sub">Our Wedding Celebration</p>
-            </div>
-
-            <div class="reveal" id="r2">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="story-card">
-                    <p class="story-text">
-                        True love isn't just about finding the perfect person, but about building a beautiful journey together. After beautiful steps filled with shared dreams, laughter, and endless support, they have chosen to walk hand-in-hand into their forever.
-                        <br><br>
-                        <strong>Hammam</strong> held her hand, <strong>Farah</strong> smiled and said yes to a lifetime of love, warmth, and beautiful memories. The journey has just begun, and the best is yet to come. 🎉
-                    </p>
-                </div>
-            </div>
-
-            <div class="reveal" id="r2b">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="romantic-box">
-                    <p class="romantic-quote">
-                        It was a night like any other —<br><em>until it wasn't.</em>
-                        <br><br>
-                        Two souls, each walking their own quiet road,<br>crossed paths under the same sky<br>at the exact moment they needed someone<br><em>without knowing they were searching.</em>
-                        <br><br>
-                        And somewhere between the stars<br>and everything left unsaid <br>they found home in each other. 🌙
-                    </p>
-                </div>
-            </div>
-
-            <div class="reveal" id="r2c">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="game-box">
-                    <p class="game-title">💘 Help Hammam reach Farah!</p>
-                    <p class="game-subtitle">Navigate through the maze of life</p>
-                    <div id="mazeStart">
-                        <div style="font-size:2.5rem;margin-bottom:1rem;">🧭</div>
-                        <p style="font-family:'Cormorant Garamond';color:rgba(248,215,218,0.6);font-style:italic;font-size:1rem;margin-bottom:1.5rem;">Use arrow keys or swipe on mobile</p>
-                        <button class="game-start-btn" onclick="initMaze()">Start Maze ✦</button>
-                    </div>
-                    <div id="mazeArea" style="display:none;">
-                        <canvas id="mazeCanvas" style="border-radius:8px;max-width:100%;display:block;margin:0 auto;cursor:default;"></canvas>
-                        <p id="mazeMsg" style="font-family:'Cormorant Garamond';color:var(--gold-light);font-style:italic;font-size:1rem;margin-top:1rem;min-height:1.5rem;"></p>
-                        <button class="play-again-btn" id="mazeRetry" style="display:none;margin-top:0.8rem;" onclick="initMaze()">Try Again 🔄</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reveal" id="r3">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <p class="section-title">The Details</p>
-                <div class="details-grid">
-                    <div class="detail-item"><p class="detail-label">📅 Date</p><p class="detail-value">16 / 7 / 2026</p></div>
-                    <div class="detail-item"><p class="detail-label">⏰ Time</p><p class="detail-value">5:00 PM</p></div>
-                    <div class="detail-item"><p class="detail-label">📍 Venue</p><p class="detail-value">Helnan Palestine</p></div>
-                    <div class="detail-item"><p class="detail-label">👔 Dress Code</p><p class="detail-value">Formal / Black Tie</p></div>
-                </div>
-            </div>
-
-            <div class="reveal" id="rMap">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <p class="section-title">🗺️ The Venue Location</p>
-                <p style="text-align:center;font-family:'Cormorant Garamond';color:rgba(248,215,218,0.55);font-style:italic;font-size:1rem;margin-bottom:1.6rem;">Follow the coast... X marks Helnan Palestine Hotel</p>
-                <div class="map-card">
-                    <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="8" width="584" height="304" fill="none" stroke="#DCA29A" stroke-width="2" stroke-dasharray="6 6" stroke-opacity="0.35" rx="10"/>
-                        <g stroke="#DCA29A" stroke-opacity="0.10" stroke-width="1">
-                            <path d="M0 60 Q200 40 400 60" fill="none"/>
-                            <path d="M0 270 Q200 290 400 270" fill="none"/>
-                        </g>
-                        <path d="M430 8 C 470 70, 410 150, 460 230 C 500 280, 470 312, 460 312 L 600 312 L 600 8 Z" fill="#7fa8a3" opacity="0.3"/>
-                        <g stroke="#5f8e89" stroke-opacity="0.3" stroke-width="1.5" fill="none">
-                            <path d="M440 30 Q470 25 500 35"/>
-                            <path d="M450 75 Q480 68 515 80"/>
-                        </g>
-                        <text x="530" y="20" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="12" fill="#F8D7DA">Mediterranean Sea</text>
-                        <path d="M395 4 C 430 70, 375 150, 420 230 C 455 285, 430 316, 420 316" fill="none" stroke="#DCA29A" stroke-width="12" opacity="0.4"/>
-                        <text x="365" y="50" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#F8D7DA" transform="rotate(-8 365 50)">Corniche Road</text>
-                        <text x="370" y="115" font-size="20">🌴</text>
-                        <text x="445" y="200" font-size="18">🌴</text>
-                        <g transform="translate(60,55)" opacity="0.6">
-                            <circle r="28" fill="none" stroke="#DCA29A" stroke-width="1.5"/>
-                            <path d="M0,-28 L5,-5 L0,0 L-5,-5 Z" fill="#F8D7DA"/>
-                            <text x="0" y="-34" text-anchor="middle" font-family="Playfair Display, serif" font-size="12" fill="#F8D7DA">N</text>
-                        </g>
-                        <path d="M75 250 C 150 230, 200 180, 230 200 C 280 230, 330 170, 360 150 C 395 128, 430 120, 470 110" fill="none" stroke="#DCA29A" stroke-width="3" stroke-dasharray="2 10"/>
-                        <g transform="translate(75,250)">
-                            <circle r="20" fill="#0F2D52" stroke="#DCA29A" stroke-width="1"/>
-                            <text x="0" y="6" text-anchor="middle" font-size="18">💍</text>
-                        </g>
-                        <g transform="translate(470,108)">
-                            <rect x="-46" y="-58" width="92" height="60" rx="6" fill="#0F2D52" stroke="#DCA29A" stroke-width="1.5"/>
-                            <g stroke="#DCA29A" stroke-width="4" stroke-linecap="round">
-                                <line x1="-10" y1="-10" x2="10" y2="10"/>
-                                <line x1="10" y1="-10" x2="-10" y2="10"/>
-                            </g>
-                            <text x="0" y="22" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="15" fill="#F8D7DA">HELNAN PALESTINE</text>
-                            <text x="0" y="40" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="12" fill="#DCA29A">Montaza, Alexandria</text>
-                        </g>
-                    </svg>
-                </div>
-                <div style="text-align:center;">
-                    <a class="map-link" href="https://maps.app.goo.gl/9g66McrpBqX1z6KRA" target="_blank" rel="noopener">Open in Maps 🧭</a>
-                </div>
-            </div>
-
-            <div class="reveal" id="r4" style="margin-top: 2.5rem;">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="rsvp-card">
-                    <h3 class="rsvp-title">Will You Join Us?</h3>
-                    <p class="rsvp-note">
-                        Please let us know if you can make it.<br>
-                        We cannot wait to share this beautiful step with the people who mean the world to us.
-                    </p>
-                    <div id="rsvpActionArea">
-                        <button class="btn-rsvp" onclick="openRsvpModal()">RSVP Here ✦</button>
-                    </div>
-                    <div class="tree-wrap" id="loveTreeSection" style="display: none;">
-                        <div class="guest-counter">
-                            💝 <span class="num" id="guestCountDisplay">0</span> loved ones have responded
-                        </div>
-                        <div class="tree-overflow">Each response blooms a leaf on our tree of life...</div>
-                        <svg viewBox="0 0 400 280" id="treeSvg">
-                            <path d="M200 260 C200 210, 185 170, 180 140 C175 110, 140 80, 110 75 M200 260 C200 210, 215 170, 220 135 C225 100, 260 75, 290 70 M195 190 C160 170, 145 130, 150 100 M202 180 C240 155, 255 120, 245 95 M180 140 C185 110, 205 85, 200 50" 
-                                  fill="none" stroke="#DCA29A" stroke-width="3.5" stroke-linecap="round" opacity="0.6"/>
-                            <g id="treeLeavesContainer"></g>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reveal" id="rFooter">
-                <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot">◆</div><div class="ornament-line"></div></div>
-                <div class="footer-sig">Farah & Hammam</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="rsvpModal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeRsvpModal()">✕</button>
-            <h3 class="modal-title">Kindly Respond</h3>
-            <label class="modal-label" for="guestName">Your Full Name</label>
-            <input type="text" id="guestName" class="modal-input" placeholder="e.g., Ahmed Ali" autocomplete="off">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem;">
-                <button class="btn-rsvp" style="padding: 0.8rem 0; width: 100%; font-size: 0.9rem;" onclick="submitRsvp(true)">Accepts 💍</button>
-                <button class="btn-rsvp" style="padding: 0.8rem 0; width: 100%; font-size: 0.9rem; background: linear-gradient(135deg, #333, #111); color: #ccc;" onclick="submitRsvp(false)">Regrets ✨</button>
-            </div>
-            <p id="modalErrorMsg" class="modal-msg"></p>
-        </div>
-    </div>
-
-    <script>
-        const bgMusic = document.getElementById('bgMusic');
-        const vinylWrapper = document.getElementById('vinyl-wrapper');
-        const vinylDisc = document.getElementById('vinylDisc');
-        const vinylIcon = document.getElementById('vinylIcon');
-        const envelopeScreen = document.getElementById('envelope-screen');
-        const envelope = document.getElementById('envelope');
-        const invitePage = document.getElementById('invite-page');
-        
-        let musicStarted = false;
-
-        const canvas = document.getElementById('stars-canvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        for (let i = 0; i < 95; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 1.3 + 0.3,
-                twinkleSpeed: Math.random() * 0.03 + 0.007,
-                alpha: Math.random(),
-                phase: Math.random() * Math.PI
-            });
-        }
-
-        function animateStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#F8D7DA';
-            stars.forEach(star => {
-                star.phase += star.twinkleSpeed;
-                ctx.globalAlpha = 0.2 + (Math.sin(star.phase) + 1) * 0.4;
-                ctx.beginPath(); ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2); ctx.fill();
-            });
-            requestAnimationFrame(animateStars);
-        }
-        animateStars();
-
-        function toggleMusic() {
-            if (!musicStarted) return;
-            if (bgMusic.paused) {
-                bgMusic.play().catch(err => console.log("Audio blocked"));
-                vinylWrapper.classList.add('playing');
-                vinylDisc.classList.add('spinning');
-                vinylIcon.innerText = "⏸ pause";
-            } else {
-                bgMusic.pause();
-                vinylWrapper.classList.remove('playing');
-                vinylDisc.classList.remove('spinning');
-                vinylIcon.innerText = "▶ play";
-            }
-        }
-
-        function openEnvelope() {
-            if (envelope.classList.contains('opening')) return;
-            envelope.classList.add('opening');
-            
-            bgMusic.play().then(() => {
-                musicStarted = true;
-                vinylWrapper.classList.add('visible', 'playing');
-                vinylDisc.classList.add('spinning');
-                vinylIcon.innerText = "⏸ pause";
-            }).catch(err => {
-                musicStarted = true;
-                vinylWrapper.classList.add('visible');
-                vinylIcon.innerText = "▶ play";
-            });
-
-            setTimeout(triggerConfettiBurst, 350);
-            setTimeout(spawnRosePetalsLoop, 700);
-
-            setTimeout(() => {
-                envelopeScreen.classList.add('away');
-                invitePage.classList.add('visible');
-                triggerScrollReveal();
-            }, 1450);
-        }
-
-        function triggerConfettiBurst() {
-            const colors = ['#DCA29A', '#F8D7DA', '#FCEFF1', '#ffffff'];
-            for (let i = 0; i < 70; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti-piece';
-                conf.style.left = Math.random() * 100 + 'vw';
-                conf.style.width = Math.random() * 7 + 4 + 'px';
-                conf.style.height = Math.random() * 10 + 5 + 'px';
-                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                conf.style.animationDuration = Math.random() * 2 + 1.8 + 's';
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 3800);
-            }
-        }
-
-        function spawnRosePetalsLoop() {
-            setInterval(() => {
-                if (document.hidden) return; 
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.backgroundColor = '#F8D7DA';
-                const dimension = Math.random() * 10 + 10;
-                petal.style.width = dimension + 'px';
-                petal.style.height = (dimension * 1.3) + 'px';
-                petal.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
-                petal.style.setProperty('--spin', (Math.random() * 540 + 180) + 'deg');
-                petal.style.animationDuration = Math.random() * 4 + 4.5 + 's';
-                document.body.appendChild(petal);
-                setTimeout(() => petal.remove(), 8500);
-            }, 380);
-        }
-
-        function triggerScrollReveal() {
-            const elements = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('shown');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.12 });
-            elements.forEach(el => observer.observe(el));
-        }
-
-        // Maze Game Matrix
-        let mazeGrid = [];
-        const mazeSize = 11;
-        let playerPos = { x: 0, y: 0 };
-        let goalPos = { x: 10, y: 10 };
-        let mazeCanvas, mazeCtx;
-        let cellSize = 24;
-
-        function initMaze() {
-            document.getElementById('mazeStart').style.display = 'none';
-            const area = document.getElementById('mazeArea');
-            area.style.display = 'block';
-            document.getElementById('mazeRetry').style.display = 'none';
-            document.getElementById('mazeMsg').innerText = "Move Hammam to Farah!";
-
-            mazeCanvas = document.getElementById('mazeCanvas');
-            mazeCtx = mazeCanvas.getContext('2d');
-            const containerW = Math.min(320, area.clientWidth - 10);
-            cellSize = Math.floor(containerW / mazeSize);
-            mazeCanvas.width = cellSize * mazeSize;
-            mazeCanvas.height = cellSize * mazeSize;
-
-            mazeGrid = [
-                [0,1,0,0,0,0,1,0,0,0,0],
-                [0,1,0,1,1,0,1,0,1,1,0],
-                [0,0,0,0,1,0,0,0,1,0,0],
-                [1,1,1,0,1,1,1,1,1,0,1],
-                [0,0,1,0,0,0,0,0,0,0,1],
-                [0,1,1,1,1,1,0,1,1,1,1],
-                [0,0,0,0,0,1,0,0,0,0,0],
-                [1,1,0,1,0,1,1,1,1,1,0],
-                [0,0,0,1,0,0,0,1,0,0,0],
-                [0,1,1,1,1,1,0,1,0,1,0],
-                [0,0,0,0,0,0,0,1,0,1,0]
-            ];
-            playerPos = { x: 0, y: 0 };
-            drawMaze();
-            window.removeEventListener('keydown', handleMazeKeys);
-            window.addEventListener('keydown', handleMazeKeys);
-            setupTouchGestures();
-        }
-
-        function drawMaze() {
-            mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-            mazeCtx.fillStyle = "rgba(248, 215, 218, 0.15)";
-            for (let r = 0; r < mazeSize; r++) {
-                for (let c = 0; c < mazeSize; c++) {
-                    if (mazeGrid[r][c] === 1) mazeCtx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
-                }
-            }
-            mazeCtx.font = `${cellSize * 0.75}px sans-serif`;
-            mazeCtx.textAlign = "center"; mazeCtx.textBaseline = "middle";
-            mazeCtx.fillText("👑", (goalPos.x * cellSize) + cellSize/2, (goalPos.y * cellSize) + cellSize/2); // فرح
-            mazeCtx.fillText("🤵", (playerPos.x * cellSize) + cellSize/2, (playerPos.y * cellSize) + cellSize/2); // همام
-        }
-
-        function movePlayer(dx, dy) {
-            let nextX = playerPos.x + dx; let nextY = playerPos.y + dy;
-            if (nextX >= 0 && nextX < mazeSize && nextY >= 0 && nextY < mazeSize) {
-                if (mazeGrid[nextY][nextX] === 0) { playerPos.x = nextX; playerPos.y = nextY; drawMaze(); checkMazeWin(); }
-            }
-        }
-
-        function handleMazeKeys(e) {
-            if (!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) return;
-            e.preventDefault();
-            if (e.key === 'ArrowUp') movePlayer(0, -1);
-            if (e.key === 'ArrowDown') movePlayer(0, 1);
-            if (e.key === 'ArrowLeft') movePlayer(-1, 0);
-            if (e.key === 'ArrowRight') movePlayer(1, 0);
-        }
-
-        let touchStartX = 0, touchStartY = 0;
-        function setupTouchGestures() {
-            mazeCanvas.ontouchstart = e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; };
-            mazeCanvas.ontouchmove = e => e.preventDefault();
-            mazeCanvas.ontouchend = e => {
-                const diffX = e.changedTouches[0].clientX - touchStartX; const diffY = e.changedTouches[0].clientY - touchStartY;
-                if (Math.abs(diffX) > Math.abs(diffY)) { if (Math.abs(diffX) > 25) movePlayer(diffX > 0 ? 1 : -1, 0); }
-                else { if (Math.abs(diffY) > 25) movePlayer(0, diffY > 0 ? 1 : -1); }
-            };
-        }
-
-        function checkMazeWin() {
-            if (playerPos.x === goalPos.x && playerPos.y === goalPos.y) {
-                document.getElementById('mazeMsg').innerText = "💖 Together at last! 'Forever' loaded successfully.";
-                window.removeEventListener('keydown', handleMazeKeys);
-                triggerConfettiBurst();
-            }
-        }
-
-        let totalGuestsCount = 34; 
-        function openRsvpModal() { document.getElementById('rsvpModal').classList.add('show'); document.getElementById('modalErrorMsg').innerText = ""; }
-        function closeRsvpModal() { document.getElementById('rsvpModal').classList.remove('show'); }
-
-        function submitRsvp(isAttending) {
-            const nameInput = document.getElementById('guestName').value.trim();
-            if (!nameInput) { document.getElementById('modalErrorMsg').innerText = "Please write your name."; return; }
-            closeRsvpModal(); triggerConfettiBurst();
-            const actionArea = document.getElementById('rsvpActionArea');
-            if (isAttending) {
-                actionArea.innerHTML = `<span class="rsvp-confirmed">✨ Thank you, ${nameInput}! See you there!</span>`;
-                totalGuestsCount++; activateLoveTreeDisplay();
-            } else {
-                actionArea.innerHTML = `<span class="rsvp-confirmed" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.4);">Thank you for wishing us well! ✨</span>`;
-            }
-        }
-
-        function activateLoveTreeDisplay() {
-            document.getElementById('loveTreeSection').style.display = 'block';
-            document.getElementById('guestCountDisplay').innerText = totalGuestsCount;
-            const targetBranches = [{x: 110, y: 75}, {x: 290, y: 70}, {x: 150, y: 100}, {x: 245, y: 95}, {x: 200, y: 50}];
-            const leavesContainer = document.getElementById('treeLeavesContainer');
-            leavesContainer.innerHTML = '';
-            const totalLeavesToGrow = Math.min(totalGuestsCount, 60);
-            for(let i=0; i < totalLeavesToGrow; i++) {
-                const anchor = targetBranches[i % targetBranches.length];
-                const heart = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                heart.setAttribute("x", anchor.x + (Math.random() * 50 - 25));
-                heart.setAttribute("y", anchor.y + (Math.random() * 50 - 25));
-                heart.setAttribute("font-size", Math.random() * 5 + 10);
-                heart.setAttribute("class", "tree-heart");
-                heart.textContent = (i % 2 === 0) ? "❤️" : "💖";
-                heart.style.animationDelay = (i * 30) + 'ms';
-                leavesContainer.appendChild(heart);
-            }
-        }
-    </script>
-</body>
-</html>
+        .map-link { display: inline-block; margin-top: 1.5rem; padding: 0.9rem 3rem; background: linear-gradient(135deg, #F8D7DA, #DCA29A); color: #071D39; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border
