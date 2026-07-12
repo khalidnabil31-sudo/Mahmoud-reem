@@ -4,7 +4,268 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دعوة زفاف | ريم و محمود</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- 🎨 ALL CSS STYLING HERE -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-beige: #f4efe6;
+            --card-beige: #eae3d2;
+            --text-brown: #4a3c31;
+            --accent-gold: #b8976c;
+            --font-arabic: 'Amiri', serif;
+            --font-english: 'Montserrat', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-beige);
+            color: var(--text-brown);
+            font-family: var(--font-arabic);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .invitation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- THE SPLIT GATES --- */
+        .gate-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            transition: visibility 1.5s;
+        }
+
+        .gate {
+            width: 50%;
+            height: 100%;
+            background-color: var(--card-beige);
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .gate-left {
+            border-right: 2px solid var(--accent-gold);
+            transform-origin: left;
+        }
+
+        .gate-right {
+            border-left: 2px solid var(--accent-gold);
+            transform-origin: right;
+        }
+
+        /* Wax Seal Button */
+        .wax-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            background-color: var(--text-brown);
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            color: var(--bg-beige);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 110;
+            transition: transform 0.3s, opacity 1s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Open State Triggered by JavaScript */
+        .opened .gate-left { transform: translateX(-100%); }
+        .opened .gate-right { transform: translateX(100%); }
+        .opened .wax-seal { opacity: 0; pointer-events: none; }
+        .opened .gate-container { visibility: hidden; }
+
+        /* --- SLIDES SYSTEM --- */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.8s;
+            background-color: var(--bg-beige);
+        }
+
+        .slide.current {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide.past {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+
+        /* --- TYPOGRAPHY & ELEMENTS --- */
+        .countdown-title {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        #countdown {
+            display: flex;
+            gap: 1.5rem;
+            direction: ltr;
+        }
+
+        #countdown div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--card-beige);
+            padding: 1rem;
+            border-radius: 8px;
+            min-width: 70px;
+            border: 1px solid rgba(184, 151, 108, 0.3);
+        }
+
+        #countdown span {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: var(--font-english);
+        }
+
+        .quran-verse {
+            max-width: 600px;
+        }
+
+        .bismillah {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+        }
+
+        .verse {
+            font-size: 1.5rem;
+            line-height: 2.2rem;
+            font-style: italic;
+        }
+
+        .sub-text-en { font-family: var(--font-english); font-size: 0.9rem; opacity: 0.8; }
+        .sub-text-ar { font-size: 1.2rem; margin-top: 0.2rem; }
+        .parents-names { font-size: 1.5rem; margin: 2rem 0; color: var(--accent-gold); font-family: var(--font-english); }
+        .invite-text-en { font-family: var(--font-english); font-size: 0.9rem; }
+        .invite-text-ar { font-size: 1.2rem; }
+
+        .monogram-zone {
+            position: relative;
+            width: 100%;
+        }
+
+        .initials-bg {
+            font-size: 8rem;
+            opacity: 0.1;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            z-index: 1;
+        }
+
+        .wedding-date-small {
+            font-family: var(--font-english);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .couple-names-main, .couple-names-secondary {
+            font-size: 3rem;
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .prayer-text {
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .large-font {
+            font-size: 1.5rem;
+            color: var(--text-brown);
+        }
+
+        .details-box {
+            margin: 2rem 0;
+            background: var(--card-beige);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .detail-item {
+            font-size: 1.3rem;
+            margin: 1rem 0;
+        }
+
+        .maps-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--text-brown);
+            color: var(--bg-beige);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            border: 1px solid var(--accent-gold);
+            transition: background 0.3s;
+        }
+
+        .maps-btn:hover {
+            background-color: var(--accent-gold);
+        }
+
+        .navigation-hint {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 <body>
 
@@ -74,7 +335,7 @@
                 
                 <div class="details-box">
                     <p class="detail-item"><strong class="large-font">التاريخ:</strong> 26 / 08 / 2026</p>
-                    <p class="detail-item"><strong class="large-font">الوقت:</strong> سيتم تحديده لاحقاً</p>
+                    <p class="detail-item"><strong class="large-font">الوقت:</strong> السابعة مساءً (7:00 PM)</p>
                     <p class="detail-item"><strong class="large-font">المكان:</strong> قاعة الاحتفال</p>
                 </div>
 
@@ -84,6 +345,69 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <!-- ⚙️ ALL JAVASCRIPT MECHANICS HERE -->
+    <script>
+        // 1. GATE CLOSURE OPENING TRIGGER
+        const openBtn = document.getElementById('openBtn');
+        const mainContainer = document.getElementById('mainContainer');
+
+        openBtn.addEventListener('click', () => {
+            mainContainer.classList.add('opened');
+        });
+
+        // 2. LIVE COUNTDOWN LOGIC (Targeting August 26, 2026 at 19:00 / 7 PM)
+        const targetDate = new Date("August 26, 2026 19:00:00").getTime();
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "لقد بدأت فرحتنا!";
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+
+        // 3. SWIPE GESTURE NAVIGATION
+        let slides = document.querySelectorAll('.slide');
+        let currentIdx = 0;
+        let startY = 0;
+
+        window.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchend', (e) => {
+            let endY = e.changedTouches[0].clientY;
+            let swipeDistance = startY - endY;
+
+            if (!mainContainer.classList.contains('opened')) return;
+
+            if (swipeDistance > 50 && currentIdx < slides.length - 1) {
+                // Swipe up: Next Slide
+                slides[currentIdx].classList.remove('current');
+                slides[currentIdx].classList.add('past');
+                currentIdx++;
+                slides[currentIdx].classList.add('current');
+            } else if (swipeDistance < -50 && currentIdx > 0) {
+                // Swipe down: Previous Slide
+                slides[currentIdx].classList.remove('current');
+                currentIdx--;
+                slides[currentIdx].classList.remove('past');
+                slides[currentIdx].classList.add('current');
+            }
+        });
+    </script>
 </body>
 </html>
