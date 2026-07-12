@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دعوة زفاف | ريم و محمود</title>
+    <title>Wedding Invitation | Reem & Mahmoud</title>
     
-    <!-- 🎨 ALL CSS STYLING HERE -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap');
 
         :root {
             --bg-beige: #f4efe6;
             --card-beige: #eae3d2;
             --text-brown: #4a3c31;
             --accent-gold: #b8976c;
-            --font-arabic: 'Amiri', serif;
-            --font-english: 'Montserrat', sans-serif;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
         }
 
         * {
@@ -27,7 +26,7 @@
         body {
             background-color: var(--bg-beige);
             color: var(--text-brown);
-            font-family: var(--font-arabic);
+            font-family: var(--font-sans);
             overflow: hidden;
             width: 100vw;
             height: 100vh;
@@ -39,14 +38,14 @@
             height: 100%;
         }
 
-        /* --- THE SPLIT GATES --- */
+        /* بوابات الفيونكة المقفولة */
         .gate-container {
             position: absolute;
             width: 100%;
             height: 100%;
             z-index: 100;
             display: flex;
-            transition: visibility 1.5s;
+            visibility: visible;
         }
 
         .gate {
@@ -67,36 +66,47 @@
             transform-origin: right;
         }
 
-        /* Wax Seal Button */
+        /* زر الفتح الدائري (الفيونكة) */
         .wax-seal {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90px;
-            height: 90px;
+            width: 110px;
+            height: 110px;
             background-color: var(--text-brown);
-            border: 3px solid var(--accent-gold);
+            border: 2px solid var(--accent-gold);
             border-radius: 50%;
             color: var(--bg-beige);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-family: var(--font-serif);
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
             font-weight: bold;
+            text-transform: uppercase;
             z-index: 110;
             transition: transform 0.3s, opacity 1s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            padding: 10px;
         }
 
-        /* Open State Triggered by JavaScript */
+        .wax-seal:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            background-color: var(--accent-gold);
+            color: var(--text-brown);
+        }
+
+        /* حركة فتح البوابات واختفاء الزر */
         .opened .gate-left { transform: translateX(-100%); }
         .opened .gate-right { transform: translateX(100%); }
         .opened .wax-seal { opacity: 0; pointer-events: none; }
-        .opened .gate-container { visibility: hidden; }
+        .opened .gate-container { visibility: hidden; transition-delay: 1.5s; }
 
-        /* --- SLIDES SYSTEM --- */
+        /* الشرايح الخلفية للعداد وباقي الكلام */
         .slide {
             position: absolute;
             top: 0;
@@ -113,6 +123,7 @@
             transform: translateY(100%);
             transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.8s;
             background-color: var(--bg-beige);
+            z-index: 10;
         }
 
         .slide.current {
@@ -125,17 +136,17 @@
             transform: translateY(-100%);
         }
 
-        /* --- TYPOGRAPHY & ELEMENTS --- */
         .countdown-title {
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         #countdown {
             display: flex;
             gap: 1.5rem;
-            direction: ltr;
         }
 
         #countdown div {
@@ -143,49 +154,39 @@
             flex-direction: column;
             align-items: center;
             background: var(--card-beige);
-            padding: 1rem;
-            border-radius: 8px;
-            min-width: 70px;
-            border: 1px solid rgba(184, 151, 108, 0.3);
+            padding: 1.2rem 1rem;
+            border-radius: 4px;
+            min-width: 80px;
+            border: 1px solid rgba(184, 151, 108, 0.4);
         }
 
         #countdown span {
-            font-size: 2rem;
-            font-weight: bold;
-            font-family: var(--font-english);
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--text-brown);
         }
 
-        .quran-verse {
-            max-width: 600px;
+        #countdown small {
+            font-family: var(--font-serif);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+            opacity: 0.7;
         }
 
-        .bismillah {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent-gold);
-        }
-
-        .verse {
-            font-size: 1.5rem;
-            line-height: 2.2rem;
-            font-style: italic;
-        }
-
-        .sub-text-en { font-family: var(--font-english); font-size: 0.9rem; opacity: 0.8; }
-        .sub-text-ar { font-size: 1.2rem; margin-top: 0.2rem; }
-        .parents-names { font-size: 1.5rem; margin: 2rem 0; color: var(--accent-gold); font-family: var(--font-english); }
-        .invite-text-en { font-family: var(--font-english); font-size: 0.9rem; }
-        .invite-text-ar { font-size: 1.2rem; }
-
-        .monogram-zone {
-            position: relative;
-            width: 100%;
-        }
-
+        .quran-verse { max-width: 600px; }
+        .bismillah { font-family: serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent-gold); }
+        .verse { font-size: 1.6rem; line-height: 2.4rem; font-style: italic; font-family: serif; }
+        .sub-text-en { font-family: var(--font-serif); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem; }
+        .parents-names { font-family: var(--font-serif); font-size: 1.6rem; font-weight: normal; line-height: 2.5rem; margin: 2rem 0; color: var(--accent-gold); }
+        .invite-text-en { font-size: 1.1rem; font-style: italic; }
+        .monogram-zone { position: relative; width: 100%; }
+        
         .initials-bg {
-            font-size: 8rem;
-            opacity: 0.1;
-            font-weight: bold;
+            font-family: var(--font-serif);
+            font-size: 10rem;
+            opacity: 0.05;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -194,103 +195,56 @@
             z-index: 1;
         }
 
-        .wedding-date-small {
-            font-family: var(--font-english);
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: var(--accent-gold);
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .couple-names-main, .couple-names-secondary {
-            font-size: 3rem;
-            font-weight: normal;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .prayer-text {
-            font-size: 1.3rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .large-font {
-            font-size: 1.5rem;
-            color: var(--text-brown);
-        }
-
-        .details-box {
-            margin: 2rem 0;
-            background: var(--card-beige);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--accent-gold);
-        }
-
-        .detail-item {
-            font-size: 1.3rem;
-            margin: 1rem 0;
-        }
-
+        .wedding-date-small { font-family: var(--font-serif); font-size: 1.3rem; letter-spacing: 4px; color: var(--accent-gold); margin-bottom: 1.5rem; position: relative; z-index: 2; }
+        .couple-names-main, .couple-names-secondary { font-family: var(--font-serif); font-size: 3.5rem; font-weight: normal; margin-bottom: 2rem; position: relative; z-index: 2; letter-spacing: 2px; }
+        .prayer-text { font-size: 1.4rem; font-family: serif; position: relative; z-index: 2; line-height: 2.2rem; }
+        .details-box { margin: 2.5rem 0; background: var(--card-beige); padding: 2.5rem 2rem; border-radius: 4px; border: 1px solid var(--accent-gold); min-width: 320px; }
+        .detail-item { font-size: 1.2rem; margin: 1.2rem 0; font-weight: 300; }
+        .detail-item strong { font-family: var(--font-serif); font-weight: 600; text-transform: uppercase; font-size: 1rem; letter-spacing: 1px; display: block; color: var(--accent-gold); margin-bottom: 0.3rem; }
+        
         .maps-btn {
             display: inline-block;
-            padding: 0.8rem 2rem;
+            padding: 1rem 2.5rem;
             background-color: var(--text-brown);
             color: var(--bg-beige);
             text-decoration: none;
-            border-radius: 30px;
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             font-weight: bold;
             border: 1px solid var(--accent-gold);
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
-        .maps-btn:hover {
-            background-color: var(--accent-gold);
-        }
-
-        .navigation-hint {
-            position: absolute;
-            bottom: 2rem;
-            font-size: 0.9rem;
-            opacity: 0.6;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
+        .maps-btn:hover { background-color: var(--accent-gold); color: var(--text-brown); }
+        .navigation-hint { position: absolute; bottom: 2.5rem; font-family: var(--font-serif); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
     </style>
 </head>
 <body>
 
     <div class="invitation-container" id="mainContainer">
         
-        <!-- THE OPENING GATES -->
-        <div class="gate-container">
+        <!-- البوابات والزرار في طبقة علوية -->
+        <div class="gate-container" id="gateContainer">
             <div class="gate gate-left"></div>
             <div class="gate gate-right"></div>
-            <div class="wax-seal" id="openBtn">
-                <span>اضغط للفتح</span>
-            </div>
+            <div class="wax-seal" id="openBtn">Open<br>Invitation</div>
         </div>
 
         <!-- SLIDE 1: COUNTDOWN -->
         <section class="slide current" id="slide1">
             <div class="countdown-wrapper">
-                <h2 class="countdown-title">متبقي على حفل الزفاف</h2>
+                <h2 class="countdown-title">Days until the Wedding</h2>
                 <div id="countdown">
-                    <div><span id="days">00</span><small>يوم</small></div>
-                    <div><span id="hours">00</span><small>ساعة</small></div>
-                    <div><span id="minutes">00</span><small>دقيقة</small></div>
-                    <div><span id="seconds">00</span><small>ثانية</small></div>
+                    <div><span id="days">00</span><small>Days</small></div>
+                    <div><span id="hours">00</span><small>Hrs</small></div>
+                    <div><span id="minutes">00</span><small>Min</small></div>
+                    <div><span id="seconds">00</span><small>Sec</small></div>
                 </div>
             </div>
+            <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
         <!-- SLIDE 2: QURANIC VERSE -->
@@ -299,55 +253,47 @@
                 <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
                 <p class="verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ"</p>
             </div>
-            <div class="navigation-hint">اسحب لأعلى ⇅</div>
+            <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
         <!-- SLIDE 3: FAMILY INVITATION -->
         <section class="slide" id="slide3">
             <div class="family-names">
                 <p class="sub-text-en">Together with their families</p>
-                <p class="sub-text-ar">بكل الحب والامتنان</p>
-                
-                <h2 class="parents-names">Mr. Mohamed Sharaf & Mr. Ezzat Mahmoud</h2>
-                
-                <p class="invite-text-en">Invite you to celebrate the wedding of</p>
-                <p class="invite-text-ar">يتشرفان بدعوتكم لحضور حفل زفاف</p>
+                <h2 class="parents-names">Mr. Mohamed Sharaf<br>&<br>Mr. Ezzat Mahmoud</h2>
+                <p class="invite-text-en">Invite you to celebrate the wedding of their children</p>
             </div>
-            <div class="navigation-hint">اسحب لأعلى ⇅</div>
+            <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
         <!-- SLIDE 4: INITIALS & NAMES -->
         <section class="slide" id="slide4">
             <div class="monogram-zone">
-                <div class="initials-bg">م ر</div>
-                <div class="wedding-date-small">26.08.2026</div>
-                <h1 class="couple-names-main">ريم | محمود</h1>
+                <div class="initials-bg">R & M</div>
+                <div class="wedding-date-small">26 . 08 . 2026</div>
+                <h1 class="couple-names-main">Reem & Mahmoud</h1>
                 <p class="prayer-text">اللهم بارك لهما وبارك عليهما واجمع بينهما في خير</p>
             </div>
-            <div class="navigation-hint">اسحب لأعلى ⇅</div>
+            <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
         <!-- SLIDE 5: LOGISTICS & LOCATION -->
         <section class="slide" id="slide5">
             <div class="final-details">
-                <h2 class="couple-names-secondary">ريم | محمود</h2>
-                <div class="divider">✦</div>
-                
+                <h2 class="couple-names-secondary">Reem & Mahmoud</h2>
                 <div class="details-box">
-                    <p class="detail-item"><strong class="large-font">التاريخ:</strong> 26 / 08 / 2026</p>
-                    <p class="detail-item"><strong class="large-font">الوقت:</strong> السابعة مساءً (7:00 PM)</p>
-                    <p class="detail-item"><strong class="large-font">المكان:</strong> قاعة الاحتفال</p>
+                    <div class="detail-item"><strong>Date</strong>August 26, 2026</div>
+                    <div class="detail-item"><strong>Time</strong>07:00 PM</div>
+                    <div class="detail-item"><strong>Venue</strong>Wedding Hall</div>
                 </div>
-
-                <a href="https://maps.google.com" target="_blank" class="maps-btn">🔗 موقع القاعة على الخريطة</a>
+                <a href="https://maps.google.com" target="_blank" class="maps-btn">📍 View Location Map</a>
             </div>
         </section>
 
     </div>
 
-    <!-- ⚙️ ALL JAVASCRIPT MECHANICS HERE -->
     <script>
-        // 1. GATE CLOSURE OPENING TRIGGER
+        // أنيميشن فتح البوابات
         const openBtn = document.getElementById('openBtn');
         const mainContainer = document.getElementById('mainContainer');
 
@@ -355,7 +301,7 @@
             mainContainer.classList.add('opened');
         });
 
-        // 2. LIVE COUNTDOWN LOGIC (Targeting August 26, 2026 at 19:00 / 7 PM)
+        // العداد التنازلي لـ 26 أغسطس 2026 الساعة 7 مساءً
         const targetDate = new Date("August 26, 2026 19:00:00").getTime();
 
         const countdownInterval = setInterval(() => {
@@ -364,7 +310,7 @@
 
             if (difference <= 0) {
                 clearInterval(countdownInterval);
-                document.getElementById("countdown").innerHTML = "لقد بدأت فرحتنا!";
+                document.getElementById("countdown").innerHTML = "The Celebration Has Begun!";
                 return;
             }
 
@@ -379,7 +325,7 @@
             document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
         }, 1000);
 
-        // 3. SWIPE GESTURE NAVIGATION
+        // التنقل بالسحب (Swipe)
         let slides = document.querySelectorAll('.slide');
         let currentIdx = 0;
         let startY = 0;
@@ -395,13 +341,11 @@
             if (!mainContainer.classList.contains('opened')) return;
 
             if (swipeDistance > 50 && currentIdx < slides.length - 1) {
-                // Swipe up: Next Slide
                 slides[currentIdx].classList.remove('current');
                 slides[currentIdx].classList.add('past');
                 currentIdx++;
                 slides[currentIdx].classList.add('current');
             } else if (swipeDistance < -50 && currentIdx > 0) {
-                // Swipe down: Previous Slide
                 slides[currentIdx].classList.remove('current');
                 currentIdx--;
                 slides[currentIdx].classList.remove('past');
