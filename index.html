@@ -126,7 +126,7 @@
         }
         .gate-right::before { left: 0; }
 
-        /* تجميعة الفيونكة الواقعية والختم الشمعي في المنتصف */
+        /* تجميعة الفيونكة والختم الشمعي في المنتصف */
         .seal-bow-wrapper {
             position: absolute;
             top: 50%;
@@ -140,29 +140,23 @@
             transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* الفيونكة الستان الحقيقية (صورة مفرغة PNG فائقة الدقة) */
+        /* الفيونكة الستان (فيكتور SVG فائق النقاء بديل الصورة التالفة) */
         .ribbon-bow {
-            width: 250px; /* حجم الفيونكة الواقعية */
+            width: 240px; 
             height: auto;
-            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 2;
         }
 
-        /* الختم الشمعي الفخم الدائري فوق شريط الفيونكة بالظبط كما في الفيديو */
+        /* الختم الشمعي الفخم الدائري (فيكتور SVG فائق النقاء بديل الصورة التالفة) */
         .wax-seal {
             position: absolute;
-            top: 52%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background-image: url('https://img.icons8.com/isometric-folders/500/wax-seal.png'); /* ختم شمعي واقعي ثلاثي الأبعاد */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            width: 85px;
+            height: 85px;
             z-index: 3;
-            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3));
             transition: transform 0.5s ease;
         }
 
@@ -175,27 +169,27 @@
 
         /* حركة التلميح لفتح الفيونكة */
         .click-text-hint {
-            margin-top: 25px;
+            margin-top: -10px;
             font-family: var(--font-serif);
             font-size: 0.75rem;
             color: var(--text-brown);
             letter-spacing: 3px;
             text-transform: uppercase;
-            background: rgba(251, 249, 244, 0.9);
+            background: rgba(251, 249, 244, 0.95);
             padding: 5px 16px;
             border-radius: 20px;
             border: 1px solid var(--accent-gold);
             font-weight: 600;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            z-index: 1;
+            z-index: 4;
             transition: all 0.3s;
         }
 
-        /* ستايلات فتح الدعوة وحل الفيونكة الواقعية */
+        /* ستايلات فتح الدعوة وحل الفيونكة */
         .opened .gate-left { transform: translateX(-100%); }
         .opened .gate-right { transform: translateX(100%); }
         
-        /* حركة حل واختفاء الفيونكة والختم بمرونة واقعية جداً */
+        /* حركة اختفاء الفيونكة والختم بمرونة واقعية */
         .opened .seal-bow-wrapper { 
             opacity: 0; 
             pointer-events: none; 
@@ -293,22 +287,52 @@
 </head>
 <body>
 
+    <!-- الخلفية الوردية الهادئة تحت بوابات الفيونكة -->
     <div class="inner-floral-bg"></div>
 
+    <!-- طبقة تساقط الورد المتحرك -->
     <div class="rose-petals-container" id="petalsContainer"></div>
 
     <div class="invitation-container" id="mainContainer">
         
+        <!-- بوابات الدعوة والفيونكة الستان الواقعية بالمنتصف -->
         <div class="gate-container" id="gateContainer">
             <div class="gate gate-left"></div>
             <div class="gate gate-right"></div>
             <div class="seal-bow-wrapper" id="openBtn">
-                <img src="https://images.rawpixel.com/image_png_1100/czM6Ly9hc3NldHMucmF3cGl4ZWwuY29tL3Byb2R1Y3Rpb25fcmVzb3VyY2VzL3BuZy9sNms4NXE5dy5wbmc.png" alt="Satin Bow" class="ribbon-bow">
-                <div class="wax-seal"></div>
+                
+                <!-- فيونكة ستان كريمية مصممة بالفيكتور SVG الداخلي ومحمية من التلف -->
+                <svg class="ribbon-bow" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="drop-shadow(0px 8px 12px rgba(0,0,0,0.15))">
+                        <!-- أطراف الشريط المتدلية -->
+                        <path d="M 90,60 L 50,115 L 70,115 L 100,65 Z" fill="#dfc49c" />
+                        <path d="M 110,60 L 150,115 L 130,115 L 100,65 Z" fill="#dfc49c" />
+                        <!-- عقدة اليمين واليسار المترابطة -->
+                        <path d="M 100,60 C 60,20 20,40 30,70 C 40,95 80,80 100,60 Z" fill="#ebd8bd" stroke="#dfc49c" stroke-width="1"/>
+                        <path d="M 100,60 C 140,20 180,40 170,70 C 160,95 120,80 100,60 Z" fill="#ebd8bd" stroke="#dfc49c" stroke-width="1"/>
+                    </g>
+                </svg>
+
+                <!-- ختم شمعي أحمر ملكي فخم مصمم بالفيكتور SVG الداخلي ومحمي من التلف -->
+                <svg class="wax-seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="drop-shadow(0px 5px 8px rgba(0,0,0,0.3))">
+                        <!-- كتلة الشمع غير المتساوية للأطراف الخارجية لإضفاء واقعية الصب -->
+                        <path d="M 50,8 C 66,7 76,14 84,24 C 92,34 94,48 91,61 C 88,74 78,86 65,90 C 52,94 36,91 25,83 C 14,75 8,61 10,47 C 12,33 22,18 36,11 C 41,9 46,8 50,8 Z" fill="#801a24" />
+                        <path d="M 48,10 C 63,9 72,15 80,25 C 87,35 89,47 86,59 C 83,71 74,82 62,86 C 50,90 35,87 25,79 C 15,71 10,58 12,45 C 14,32 23,18 36,12 C 40,11 44,10 48,10 Z" fill="#91242e" />
+                        <!-- برواز الضغط الداخلي المذهب -->
+                        <circle cx="50" cy="50" r="28" fill="none" stroke="#540e15" stroke-width="1.5" />
+                        <circle cx="50" cy="50" r="26" fill="none" stroke="#d4af37" stroke-width="1.2" opacity="0.8" />
+                        <!-- تفاصيل الشعار أو الفيونكة الذهبية الفخمة داخل الختم -->
+                        <path d="M 42,38 C 45,34 50,38 50,38 C 50,38 55,34 58,38 C 62,44 50,58 50,58 C 50,58 38,44 42,38 Z" fill="#d4af37" />
+                        <path d="M 45,45 L 55,45 M 50,42 L 50,52" stroke="#d4af37" stroke-width="1" opacity="0.5" />
+                    </g>
+                </svg>
+                
                 <div class="click-text-hint">Tap to Open</div>
             </div>
         </div>
 
+        <!-- SLIDE 1: COUNTDOWN -->
         <section class="slide current" id="slide1">
             <h2 class="countdown-title">Days until the Wedding</h2>
             <div id="countdown">
@@ -320,12 +344,14 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
+        <!-- SLIDE 2: QURANIC VERSE -->
         <section class="slide" id="slide2">
             <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
             <p class="verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنكُم مَّوَدَّةً وَرَحْمَةً"</p>
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
+        <!-- SLIDE 3: FAMILY INVITATION -->
         <section class="slide" id="slide3">
             <p class="sub-text-en">Together with their families</p>
             <h2 class="parents-names">Mr. Mohamed Sharaf<br>&<br>Mr. Ezzat Mahmoud</h2>
@@ -333,6 +359,7 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
+        <!-- SLIDE 4: NAMES -->
         <section class="slide" id="slide4">
             <div class="wedding-date-small">26 . 08 . 2026</div>
             <h1 class="couple-names-main">Reem & Mahmoud</h1>
@@ -340,6 +367,7 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
+        <!-- SLIDE 5: DETAILS -->
         <section class="slide" id="slide5">
             <h2 class="couple-names-secondary">Reem & Mahmoud</h2>
             <div class="details-box">
