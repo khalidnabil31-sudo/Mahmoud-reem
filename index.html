@@ -9,9 +9,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap');
 
         :root {
-            --bg-beige: #f9f6f0;
-            --card-beige: rgba(243, 237, 224, 0.85);
-            --text-brown: #3d3126;
+            --bg-beige: #fbf9f4;
+            --card-beige: rgba(251, 249, 244, 0.9);
+            --text-brown: #4a3b32;
             --accent-gold: #c5a880;
             --font-serif: 'Cinzel', serif;
             --font-sans: 'Montserrat', sans-serif;
@@ -33,31 +33,45 @@
             height: 100vh;
         }
 
-        /* خلفية الورد المتساقط الهادئ */
-        .floral-bg {
+        /* خلفية الورد والأعمدة الكلاسيكية الداخلية (خلف الكلام) */
+        .inner-floral-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=1000&auto=format&fit=crop'); /* خلفية ورد شيك */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.12; /* شفافة وهادئة عشان الكلام يقرأ بوضوح */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* تساقط أوراق الورد (بند الورد المتساقط الهادئ في الخلفية) */
+        .rose-petals-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
             overflow: hidden;
-            opacity: 0.6;
         }
 
         .petal {
             position: absolute;
             background: radial-gradient(circle, #fff0f5 20%, #ffb6c1 100%);
             border-radius: 150% 0% 150% 50%;
-            opacity: 0.7;
-            animation: fade-fall 10s linear infinite;
+            opacity: 0.6;
+            animation: petal-fall 8s linear infinite;
         }
 
-        @keyframes fade-fall {
-            0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
+        @keyframes petal-fall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
 
@@ -67,7 +81,7 @@
             height: 100%;
         }
 
-        /* بوابات الدعوة */
+        /* بوابات الدعوة الكلاسيكية المغلقة */
         .gate-container {
             position: absolute;
             width: 100%;
@@ -80,18 +94,40 @@
         .gate {
             width: 50%;
             height: 100%;
-            background-color: #f4efe6;
-            background-image: radial-gradient(rgba(184, 151, 108, 0.15) 1px, transparent 0);
-            background-size: 24px 24px;
-            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 0 0 30px rgba(0,0,0,0.08);
+            background-color: #f7f3eb;
+            /* رسم الورد الكلاسيكي المذهب على أطراف البوابات الخارجية */
+            background-image: url('https://www.transparenttextur.com/patterns/cream-paper.png');
+            transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 0 0 40px rgba(0,0,0,0.12);
+            position: relative;
         }
 
-        .gate-left { border-right: 3px double var(--accent-gold); transform-origin: left; }
-        .gate-right { border-left: 3px double var(--accent-gold); transform-origin: right; }
+        /* نقوش الورد الجانبية على البوابات الخارجية */
+        .gate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=300&auto=format&fit=crop');
+            background-size: cover;
+            opacity: 0.15;
+        }
 
-        /* منطقة الفيونكة في النص */
-        .bow-zone {
+        .gate-left {
+            border-right: 1px solid var(--accent-gold);
+            transform-origin: left;
+        }
+        .gate-left::before { right: 0; }
+
+        .gate-right {
+            border-left: 1px solid var(--accent-gold);
+            transform-origin: right;
+        }
+        .gate-right::before { left: 0; }
+
+        /* تجميعة الفيونكة الواقعية والختم الشمعي في المنتصف */
+        .seal-bow-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -101,62 +137,74 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: all 1s ease;
+            transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* رسم الفيونكة بالـ CSS */
-        .css-bow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 100px;
-            height: 60px;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        /* الفيونكة الستان الحقيقية (صورة مفرغة PNG فائقة الدقة) */
+        .ribbon-bow {
+            width: 250px; /* حجم الفيونكة الواقعية */
+            height: auto;
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
         }
 
-        .bow-loop {
-            width: 45px;
-            height: 50px;
-            background: var(--text-brown);
-            border: 2px solid var(--accent-gold);
-            border-radius: 50% 50% 40% 40%;
-        }
-
-        .loop-left { transform: rotate(-25deg); margin-right: -5px; }
-        .loop-right { transform: rotate(25deg); margin-left: -5px; }
-
-        .bow-knot {
-            width: 24px;
-            height: 24px;
-            background: var(--accent-gold);
-            border: 2px solid var(--text-brown);
-            border-radius: 50%;
+        /* الختم الشمعي الفخم الدائري فوق شريط الفيونكة بالظبط كما في الفيديو */
+        .wax-seal {
             position: absolute;
-            z-index: 5;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-image: url('https://img.icons8.com/isometric-folders/500/wax-seal.png'); /* ختم شمعي واقعي ثلاثي الأبعاد */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 3;
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3));
+            transition: transform 0.5s ease;
         }
 
-        .click-hint {
+        .seal-bow-wrapper:hover .ribbon-bow {
+            transform: scale(1.05);
+        }
+        .seal-bow-wrapper:hover .wax-seal {
+            transform: translate(-50%, -50%) scale(1.1) rotate(10deg);
+        }
+
+        /* حركة التلميح لفتح الفيونكة */
+        .click-text-hint {
+            margin-top: 25px;
             font-family: var(--font-serif);
             font-size: 0.75rem;
             color: var(--text-brown);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            background: #f4efe6;
-            padding: 4px 12px;
+            background: rgba(251, 249, 244, 0.9);
+            padding: 5px 16px;
             border-radius: 20px;
             border: 1px solid var(--accent-gold);
             font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            z-index: 1;
+            transition: all 0.3s;
         }
 
-        /* حركات الفتح */
+        /* ستايلات فتح الدعوة وحل الفيونكة الواقعية */
         .opened .gate-left { transform: translateX(-100%); }
         .opened .gate-right { transform: translateX(100%); }
-        .opened .bow-zone { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.7); }
-        .opened .gate-container { visibility: hidden; transition-delay: 1.5s; }
+        
+        /* حركة حل واختفاء الفيونكة والختم بمرونة واقعية جداً */
+        .opened .seal-bow-wrapper { 
+            opacity: 0; 
+            pointer-events: none; 
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+        .opened .gate-container { visibility: hidden; transition-delay: 1.8s; }
 
-        /* الشرايح والمحتوى */
+
+        /* الشرايح والمحتوى الداخلي مع حركة الانزلاق */
         .slide {
             position: absolute;
             top: 0;
@@ -167,25 +215,25 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 2.5rem;
             text-align: center;
             opacity: 0;
-            transform: translateY(40px);
-            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s;
+            transform: translateY(30px);
+            transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.9s;
             z-index: 10;
         }
 
         .slide.current { opacity: 1; transform: translateY(0); }
-        .slide.past { opacity: 0; transform: translateY(-40px); }
+        .slide.past { opacity: 0; transform: translateY(-30px); }
 
-        /* ستايل الفونطات الجديد الشيك */
+        /* ستايلات الخطوط الفخمة والأنيقة */
         .countdown-title {
             font-family: var(--font-serif);
-            font-size: 1.5rem;
-            font-weight: 400;
+            font-size: 1.4rem;
+            font-weight: 600;
             margin-bottom: 2.5rem;
-            letter-spacing: 3px;
-            color: var(--text-brown);
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
         #countdown { display: flex; gap: 1.2rem; }
@@ -198,33 +246,34 @@
             padding: 1.5rem 1rem;
             border-radius: 8px;
             min-width: 75px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid rgba(197, 168, 128, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            backdrop-filter: blur(8px);
         }
 
-        #countdown span { font-size: 2.2rem; font-weight: 300; color: var(--text-brown); font-family: var(--font-sans); }
-        #countdown small { font-family: var(--font-serif); font-size: 0.7rem; letter-spacing: 1px; margin-top: 0.5rem; opacity: 0.8; color: var(--accent-gold); }
+        #countdown span { font-size: 2.2rem; font-weight: 300; }
+        #countdown small { font-family: var(--font-serif); font-size: 0.7rem; letter-spacing: 1px; margin-top: 0.5rem; color: var(--accent-gold); text-transform: uppercase; }
 
-        .verse { font-size: 1.6rem; line-height: 2.8rem; font-family: serif; color: var(--text-brown); font-weight: 500; max-width: 550px; }
-        .bismillah { font-size: 1.4rem; margin-bottom: 1.5rem; color: var(--accent-gold); font-family: serif; }
+        .verse { font-size: 1.7rem; line-height: 2.8rem; font-family: serif; font-weight: 500; max-width: 550px; }
+        .bismillah { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent-gold); font-family: serif; }
         
-        .sub-text-en { font-family: var(--font-serif); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; opacity: 0.8; }
-        .parents-names { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; line-height: 2.8rem; margin: 2rem 0; color: var(--text-brown); }
-        .invite-text-en { font-family: var(--font-sans); font-size: 1rem; font-weight: 300; letter-spacing: 0.5px; opacity: 0.9; }
+        .sub-text-en { font-family: var(--font-serif); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.8; }
+        .parents-names { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; line-height: 2.8rem; margin: 2rem 0; letter-spacing: 1px; }
+        .invite-text-en { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 300; letter-spacing: 0.5px; opacity: 0.9; }
         
-        .couple-names-main { font-family: var(--font-script); font-size: 5.5rem; color: var(--text-brown); margin: 1rem 0; font-weight: normal; }
-        .couple-names-secondary { font-family: var(--font-script); font-size: 4rem; color: var(--text-brown); font-weight: normal; }
+        .couple-names-main { font-family: var(--font-script); font-size: 5.5rem; margin: 1rem 0; font-weight: normal; color: var(--text-brown); }
+        .couple-names-secondary { font-family: var(--font-script); font-size: 4rem; font-weight: normal; }
         
-        .wedding-date-small { font-family: var(--font-serif); font-size: 1.2rem; letter-spacing: 5px; color: var(--accent-gold); }
-        .prayer-text { font-size: 1.3rem; font-family: serif; margin-top: 1.5rem; color: var(--accent-gold); }
+        .wedding-date-small { font-family: var(--font-serif); font-size: 1.2rem; letter-spacing: 6px; color: var(--accent-gold); }
+        .prayer-text { font-size: 1.35rem; font-family: serif; margin-top: 1.5rem; color: var(--accent-gold); }
 
-        .details-box { margin: 2rem 0; background: var(--card-beige); padding: 2rem; border-radius: 8px; border: 1px solid var(--accent-gold); min-width: 300px; backdrop-filter: blur(5px); }
-        .detail-item { font-size: 1.1rem; margin: 1rem 0; font-weight: 400; }
-        .detail-item strong { font-family: var(--font-serif); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; display: block; color: var(--accent-gold); margin-bottom: 0.4rem; }
+        .details-box { margin: 2rem 0; background: var(--card-beige); padding: 2rem; border-radius: 8px; border: 1px solid var(--accent-gold); min-width: 300px; backdrop-filter: blur(8px); }
+        .detail-item { font-size: 1.1rem; margin: 1rem 0; }
+        .detail-item strong { font-family: var(--font-serif); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; display: block; color: var(--accent-gold); margin-bottom: 0.4rem; }
         
         .maps-btn {
             display: inline-block;
-            padding: 0.9rem 2rem;
+            padding: 0.9rem 2.2rem;
             background-color: var(--text-brown);
             color: #fff;
             text-decoration: none;
@@ -244,26 +293,22 @@
 </head>
 <body>
 
-    <!-- الورد المتساقط في الخلفية الثابتة -->
-    <div class="floral-bg" id="floralBg"></div>
+    <div class="inner-floral-bg"></div>
+
+    <div class="rose-petals-container" id="petalsContainer"></div>
 
     <div class="invitation-container" id="mainContainer">
         
-        <!-- البوابات والفيونكة -->
         <div class="gate-container" id="gateContainer">
             <div class="gate gate-left"></div>
             <div class="gate gate-right"></div>
-            <div class="bow-zone" id="openBtn">
-                <div class="css-bow">
-                    <div class="bow-loop loop-left"></div>
-                    <div class="bow-knot"></div>
-                    <div class="bow-loop loop-right"></div>
-                </div>
-                <div class="click-hint">Open</div>
+            <div class="seal-bow-wrapper" id="openBtn">
+                <img src="https://images.rawpixel.com/image_png_1100/czM6Ly9hc3NldHMucmF3cGl4ZWwuY29tL3Byb2R1Y3Rpb25fcmVzb3VyY2VzL3BuZy9sNms4NXE5dy5wbmc.png" alt="Satin Bow" class="ribbon-bow">
+                <div class="wax-seal"></div>
+                <div class="click-text-hint">Tap to Open</div>
             </div>
         </div>
 
-        <!-- SLIDE 1: COUNTDOWN -->
         <section class="slide current" id="slide1">
             <h2 class="countdown-title">Days until the Wedding</h2>
             <div id="countdown">
@@ -275,14 +320,12 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 2: QURANIC VERSE -->
         <section class="slide" id="slide2">
             <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
             <p class="verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنكُم مَّوَدَّةً وَرَحْمَةً"</p>
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 3: FAMILY INVITATION -->
         <section class="slide" id="slide3">
             <p class="sub-text-en">Together with their families</p>
             <h2 class="parents-names">Mr. Mohamed Sharaf<br>&<br>Mr. Ezzat Mahmoud</h2>
@@ -290,7 +333,6 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 4: NAMES -->
         <section class="slide" id="slide4">
             <div class="wedding-date-small">26 . 08 . 2026</div>
             <h1 class="couple-names-main">Reem & Mahmoud</h1>
@@ -298,7 +340,6 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 5: DETAILS -->
         <section class="slide" id="slide5">
             <h2 class="couple-names-secondary">Reem & Mahmoud</h2>
             <div class="details-box">
@@ -312,9 +353,9 @@
     </div>
 
     <script>
-        // توليد الورد المتساقط ديناميكياً
-        const floralBg = document.getElementById('floralBg');
-        const petalCount = 15;
+        // آلية توليد تساقط أوراق الورد الهادئة بالخلفية
+        const petalsContainer = document.getElementById('petalsContainer');
+        const petalCount = 18;
         
         for (let i = 0; i < petalCount; i++) {
             const petal = document.createElement('div');
@@ -323,11 +364,11 @@
             petal.style.width = Math.random() * 12 + 8 + 'px';
             petal.style.height = Math.random() * 12 + 8 + 'px';
             petal.style.animationDelay = Math.random() * 8 + 's';
-            petal.style.animationDuration = Math.random() * 6 + 6 + 's';
-            floralBg.appendChild(petal);
+            petal.style.animationDuration = Math.random() * 6 + 7 + 's';
+            petalsContainer.appendChild(petal);
         }
 
-        // أنيميشن فتح البوابات
+        // أنيميشن حل الفيونكة وفتح البوابات
         const openBtn = document.getElementById('openBtn');
         const mainContainer = document.getElementById('mainContainer');
 
@@ -335,7 +376,7 @@
             mainContainer.classList.add('opened');
         });
 
-        // العداد التنازلي
+        // تشغيل العداد التنازلي للتاريخ
         const targetDate = new Date("August 26, 2026 19:00:00").getTime();
 
         setInterval(() => {
@@ -355,7 +396,7 @@
             document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
         }, 1000);
 
-        // التنقل بالسحب (Swipe)
+        // التنقل والتحريك بالسحب (Swipe) للأجهزة الذكية
         let slides = document.querySelectorAll('.slide');
         let currentIdx = 0;
         let startY = 0;
