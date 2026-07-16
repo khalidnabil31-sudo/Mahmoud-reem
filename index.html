@@ -144,18 +144,18 @@
             height: auto;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
+            z-index: 2; /* الطبقة تحت الختم الشمعي */
         }
 
-        /* الختم الشمعي الأحمر المرفوع محلياً */
+        /* الختم الشمعي الأحمر المرفوع محلياً وفوق الفيونكة */
         .wax-seal {
             position: absolute;
-            top: 50%;
+            top: 40%; /* تم تعديل الموقع ليتناسب تماماً مع منتصف عقدة الفيونكة */
             left: 50%;
             transform: translate(-50%, -50%);
             width: 80px;
             height: auto;
-            z-index: 3;
+            z-index: 5; /* قيمة أكبر ليكون فوق الفيونكة تماماً */
             filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
             transition: transform 0.5s ease;
         }
@@ -252,169 +252,4 @@
         .parents-names { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; line-height: 2.8rem; margin: 2rem 0; letter-spacing: 1px; }
         .invite-text-en { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 300; letter-spacing: 0.5px; opacity: 0.9; }
         
-        .couple-names-main { font-family: var(--font-script); font-size: 5.5rem; margin: 1rem 0; font-weight: normal; color: var(--text-brown); }
-        .couple-names-secondary { font-family: var(--font-script); font-size: 4rem; font-weight: normal; }
-        
-        .wedding-date-small { font-family: var(--font-serif); font-size: 1.2rem; letter-spacing: 6px; color: var(--accent-gold); }
-        .prayer-text { font-size: 1.35rem; font-family: serif; margin-top: 1.5rem; color: var(--accent-gold); }
-
-        .details-box { margin: 2rem 0; background: var(--card-beige); padding: 2rem; border-radius: 8px; border: 1px solid var(--accent-gold); min-width: 300px; backdrop-filter: blur(8px); }
-        .detail-item { font-size: 1.1rem; margin: 1rem 0; }
-        .detail-item strong { font-family: var(--font-serif); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; display: block; color: var(--accent-gold); margin-bottom: 0.4rem; }
-        
-        .maps-btn {
-            display: inline-block;
-            padding: 0.9rem 2.2rem;
-            background-color: var(--text-brown);
-            color: #fff;
-            text-decoration: none;
-            font-family: var(--font-serif);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .maps-btn:hover { background-color: var(--accent-gold); }
-
-        .navigation-hint { position: absolute; bottom: 2rem; font-family: var(--font-serif); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
-    </style>
-</head>
-<body>
-
-    <div class="inner-floral-bg"></div>
-
-    <div class="rose-petals-container" id="petalsContainer"></div>
-
-    <div class="invitation-container" id="mainContainer">
-        
-        <div class="gate-container" id="gateContainer">
-            <div class="gate gate-left"></div>
-            <div class="gate gate-right"></div>
-            <div class="seal-bow-wrapper" id="openBtn">
-                
-                <img src="bow.png" class="ribbon-bow" alt="Satin Bow">
-                
-                <img src="seal.png" class="wax-seal" alt="Wax Seal">
-                
-                <div class="click-text-hint">Tap to Open</div>
-            </div>
-        </div>
-
-        <section class="slide current" id="slide1">
-            <h2 class="countdown-title">Days until the Wedding</h2>
-            <div id="countdown">
-                <div><span id="days">00</span><small>Days</small></div>
-                <div><span id="hours">00</span><small>Hours</small></div>
-                <div><span id="minutes">00</span><small>Min</small></div>
-                <div><span id="seconds">00</span><small>Sec</small></div>
-            </div>
-            <div class="navigation-hint">Swipe Up ⇅</div>
-        </section>
-
-        <section class="slide" id="slide2">
-            <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-            <p class="verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنكُم مَّوَدَّةً وَرَحْمَةً"</p>
-            <div class="navigation-hint">Swipe Up ⇅</div>
-        </section>
-
-        <section class="slide" id="slide3">
-            <p class="sub-text-en">Together with their families</p>
-            <h2 class="parents-names">Mr. Mohamed Sharaf<br>&<br>Mr. Ezzat Mahmoud</h2>
-            <p class="invite-text-en">Invite you to celebrate the wedding of their children</p>
-            <div class="navigation-hint">Swipe Up ⇅</div>
-        </section>
-
-        <section class="slide" id="slide4">
-            <div class="wedding-date-small">26 . 08 . 2026</div>
-            <h1 class="couple-names-main">Reem & Mahmoud</h1>
-            <p class="prayer-text">اللهم بارك لهما وبارك عليهما واجمع بينهما في خير</p>
-            <div class="navigation-hint">Swipe Up ⇅</div>
-        </section>
-
-        <section class="slide" id="slide5">
-            <h2 class="couple-names-secondary">Reem & Mahmoud</h2>
-            <div class="details-box">
-                <div class="detail-item"><strong>Date</strong>August 26, 2026</div>
-                <div class="detail-item"><strong>Time</strong>07:00 PM</div>
-                <div class="detail-item"><strong>Venue</strong>Wedding Hall</div>
-            </div>
-            <a href="https://maps.google.com" target="_blank" class="maps-btn">📍 View Location Map</a>
-        </section>
-
-    </div>
-
-    <script>
-        // آلية توليد تساقط أوراق الورد الهادئة بالخلفية
-        const petalsContainer = document.getElementById('petalsContainer');
-        const petalCount = 18;
-        
-        for (let i = 0; i < petalCount; i++) {
-            const petal = document.createElement('div');
-            petal.classList.add('petal');
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.width = Math.random() * 12 + 8 + 'px';
-            petal.style.height = Math.random() * 12 + 8 + 'px';
-            petal.style.animationDelay = Math.random() * 8 + 's';
-            petal.style.animationDuration = Math.random() * 6 + 7 + 's';
-            petalsContainer.appendChild(petal);
-        }
-
-        // أنيميشن حل الفيونكة وفتح البوابات
-        const openBtn = document.getElementById('openBtn');
-        const mainContainer = document.getElementById('mainContainer');
-
-        openBtn.addEventListener('click', () => {
-            mainContainer.classList.add('opened');
-        });
-
-        // تشغيل العداد التنازلي للتاريخ
-        const targetDate = new Date("August 26, 2026 19:00:00").getTime();
-
-        setInterval(() => {
-            const now = new Date().getTime();
-            const difference = targetDate - now;
-
-            if (difference <= 0) return;
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-        }, 1000);
-
-        // التنقل والتحريك بالسحب (Swipe) للأجهزة الذكية
-        let slides = document.querySelectorAll('.slide');
-        let currentIdx = 0;
-        let startY = 0;
-
-        window.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
-
-        window.addEventListener('touchend', (e) => {
-            let endY = e.changedTouches[0].clientY;
-            let swipeDistance = startY - endY;
-
-            if (!mainContainer.classList.contains('opened')) return;
-
-            if (swipeDistance > 50 && currentIdx < slides.length - 1) {
-                slides[currentIdx].classList.remove('current');
-                slides[currentIdx].classList.add('past');
-                currentIdx++;
-                slides[currentIdx].classList.add('current');
-            } else if (swipeDistance < -50 && currentIdx > 0) {
-                slides[currentIdx].classList.remove('current');
-                currentIdx--;
-                slides[currentIdx].classList.remove('past');
-                slides[currentIdx].classList.add('current');
-            }
-        });
-    </script>
-</body>
-</html>
+        .couple-names-main { font-family: var(--font-script); font
