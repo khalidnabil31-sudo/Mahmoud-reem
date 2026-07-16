@@ -125,36 +125,22 @@
         }
         .gate-right::before { left: 0; }
 
-        /* تقسيم صورة الفيونكة لجزئين ملتصقين بالبوابات - تم تعديل الاسم لـ bow2.jpg */
-        .gate-ribbon {
+        /* صورة الفيونكة الواحدة الكاملة في منتصف الشاشة */
+        .single-bow-overlay {
             position: absolute;
-            top: 50%;
+            top: 0;
+            left: 0;
             width: 100vw;
-            height: 180px; 
+            height: 100vh;
             background-image: url('bow2.jpg');
             background-size: cover;
             background-position: center;
-            transform: translateY(-50%);
-            pointer-events: none;
+            pointer-events: none; /* عشان ما تمنعش الضغط على الختم */
             z-index: 105;
-            transition: transform 2.2s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: opacity 1.2s ease, transform 1.2s ease;
         }
 
-        /* الجزء الأيسر من الفيونكة داخل البوابة اليسرى */
-        .gate-left .gate-ribbon {
-            right: 0;
-            width: 50vw;
-            background-position: left center;
-        }
-
-        /* الجزء الأيمن من الفيونكة داخل البوابة اليمنى */
-        .gate-right .gate-ribbon {
-            left: 0;
-            width: 50vw;
-            background-position: right center;
-        }
-
-        /* منطقة الختم الشمعي المتمركزة بالمنتصف فوق الفيونكة المقسومة */
+        /* منطقة الختم الشمعي المتمركزة بالمنتصف */
         .seal-wrapper {
             position: absolute;
             top: 50%;
@@ -200,6 +186,12 @@
         .opened .gate-left { transform: translateX(-100%); }
         .opened .gate-right { transform: translateX(100%); }
         
+        /* الفيونكة تختفي بنعومة مع تكبير بسيط للحركة */
+        .opened .single-bow-overlay { 
+            opacity: 0; 
+            transform: scale(1.08);
+        }
+
         .opened .seal-wrapper { 
             opacity: 0; 
             pointer-events: none; 
@@ -310,17 +302,16 @@
         
         <!-- بوابات الدعوة والفيونكة البينك المقسومة بالمنتصف -->
         <div class="gate-container" id="gateContainer">
-            <!-- البوابة اليسرى وبها النصف الأيسر من الفيونكة -->
-            <div class="gate gate-left">
-                <div class="gate-ribbon"></div>
-            </div>
+            <!-- البوابة اليسرى -->
+            <div class="gate gate-left"></div>
             
-            <!-- البوابة اليمنى وبها النصف الأيمن من الفيونكة -->
-            <div class="gate gate-right">
-                <div class="gate-ribbon"></div>
-            </div>
+            <!-- البوابة اليمنى -->
+            <div class="gate gate-right"></div>
 
-            <!-- الختم الشمعي في المنتصف تماماً فوق الفيونكة المقصوصة -->
+            <!-- صورة الفيونكة الكاملة التي تملأ الشاشة بالكامل دون تقسيم -->
+            <div class="single-bow-overlay"></div>
+
+            <!-- الختم الشمعي في المنتصف تماماً -->
             <div class="seal-wrapper" id="openBtn">
                 <!-- استدعاء ملف الختم محلياً -->
                 <img src="seal.png" class="wax-seal" alt="Wax Seal">
