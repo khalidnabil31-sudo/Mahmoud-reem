@@ -33,7 +33,6 @@
             height: 100vh;
         }
 
-        /* خلفية الورد الكلاسيكية الداخلية خلف الكلام */
         .inner-floral-bg {
             position: absolute;
             top: 0;
@@ -48,7 +47,6 @@
             z-index: 1;
         }
 
-        /* تساقط أوراق الورد الهادئ في الخلفية */
         .rose-petals-container {
             position: absolute;
             top: 0;
@@ -81,7 +79,6 @@
             height: 100%;
         }
 
-        /* بوابات الدعوة الكلاسيكية المغلقة */
         .gate-container {
             position: absolute;
             width: 100%;
@@ -125,7 +122,6 @@
         }
         .gate-right::before { left: 0; }
 
-        /* صورة الفيونكة الواحدة الكاملة في منتصف الشاشة */
         .single-bow-overlay {
             position: absolute;
             top: 0;
@@ -135,12 +131,11 @@
             background-image: url('bow2.jpg');
             background-size: cover;
             background-position: center;
-            pointer-events: none; /* عشان ما تمنعش الضغط على الختم */
+            pointer-events: none;
             z-index: 105;
             transition: opacity 1.2s ease, transform 1.2s ease;
         }
 
-        /* منطقة الختم الشمعي المتمركزة بالمنتصف */
         .seal-wrapper {
             position: absolute;
             top: 50%;
@@ -154,7 +149,6 @@
             transition: all 1.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* الختم الشمعي الأحمر */
         .wax-seal {
             width: 85px;
             height: auto;
@@ -182,11 +176,9 @@
             z-index: 4;
         }
 
-        /* حركات الفتح عند الضغط */
         .opened .gate-left { transform: translateX(-100%); }
         .opened .gate-right { transform: translateX(100%); }
         
-        /* الفيونكة تختفي بنعومة مع تكبير بسيط للحركة */
         .opened .single-bow-overlay { 
             opacity: 0; 
             transform: scale(1.08);
@@ -199,8 +191,6 @@
         }
         .opened .gate-container { visibility: hidden; transition-delay: 2.2s; }
 
-
-        /* الشرايح والمحتوى الداخلي للموقع */
         .slide {
             position: absolute;
             top: 0;
@@ -222,7 +212,6 @@
         .slide.current { opacity: 1; transform: translateY(0); }
         .slide.past { opacity: 0; transform: translateY(-30px); }
 
-        /* ستايلات الخطوط الفخمة والأنيقة */
         .countdown-title {
             font-family: var(--font-serif);
             font-size: 1.4rem;
@@ -283,16 +272,15 @@
         }
         .maps-btn:hover { background-color: var(--accent-gold); }
 
-        /* ستايل محسّن لعلامة السحب لأعلى لجعلها أوضح وأعلى قليلاً */
         .navigation-hint { 
             position: absolute; 
-            bottom: 4rem; /* تم رفعه للأعلى قليلاً لتجنب شريط التصفح السفلي في الموبايل */
+            bottom: 4rem; 
             font-family: var(--font-serif); 
-            font-size: 1rem; /* تكبير الخط */
+            font-size: 1rem; 
             font-weight: 600;
             letter-spacing: 4px; 
             text-transform: uppercase; 
-            opacity: 0.75; /* زيادة الوضوح */
+            opacity: 0.75; 
             color: var(--text-brown);
             text-shadow: 0 2px 4px rgba(251, 249, 244, 0.8);
             animation: bounce 2s infinite; 
@@ -302,44 +290,29 @@
 </head>
 <body>
 
-    <!-- استدعاء ملف الصوت المقصوص -->
     <audio id="bgMusic" src="wed.mp3" preload="auto"></audio>
 
-    <!-- الخلفية الوردية الهادئة تحت بوابات الفيونكة -->
     <div class="inner-floral-bg"></div>
-
-    <!-- طبقة تساقط الورد المتحرك -->
     <div class="rose-petals-container" id="petalsContainer"></div>
 
     <div class="invitation-container" id="mainContainer">
         
-        <!-- بوابات الدعوة والفيونكة البينك المقسومة بالمنتصف -->
         <div class="gate-container" id="gateContainer">
-            <!-- البوابة اليسرى -->
             <div class="gate gate-left"></div>
-            
-            <!-- البوابة اليمنى -->
             <div class="gate gate-right"></div>
-
-            <!-- صورة الفيونكة الكاملة التي تملأ الشاشة بالكامل دون تقسيم -->
             <div class="single-bow-overlay"></div>
-
-            <!-- الختم الشمعي في المنتصف تماماً -->
             <div class="seal-wrapper" id="openBtn">
-                <!-- استدعاء ملف الختم محلياً -->
                 <img src="seal.png" class="wax-seal" alt="Wax Seal">
                 <div class="click-text-hint">Tap to Open</div>
             </div>
         </div>
 
-        <!-- SLIDE 1: QURANIC VERSE (أول صفحة) -->
         <section class="slide current" id="slide1">
             <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
             <p class="verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنكُم مَّوَدَّةً وَرَحْمَةً"</p>
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 2: FAMILY INVITATION (التفاصيل العائلية) -->
         <section class="slide" id="slide2">
             <p class="sub-text-en">Together with their families</p>
             <h2 class="parents-names">Mr. Mohamed Sharaf<br>&<br>Mr. Ezzat Mahmoud</h2>
@@ -347,7 +320,6 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 3: NAMES (الأسماء والتاريخ بالأعلى) -->
         <section class="slide" id="slide3">
             <div class="wedding-date-small">26 . 08 . 2026</div>
             <h1 class="couple-names-main">Reem & Mahmoud</h1>
@@ -355,7 +327,6 @@
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 4: DETAILS & VENUE (العنوان وتفاصيل القاعة) -->
         <section class="slide" id="slide4">
             <h2 class="couple-names-secondary">Reem & Mahmoud</h2>
             <div class="details-box">
@@ -363,11 +334,16 @@
                 <div class="detail-item"><strong>Time</strong>07:00 PM</div>
                 <div class="detail-item"><strong>Venue</strong>Crowne Plaza - Mirage Hotel</div>
             </div>
-            <a href="https://www.google.com/maps/dir//mirage+smouha/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x14f5c5569f53a049:0x53e69023a3abed74?sa=X&ved=1t:155782&ictx=111" target="_blank" class="maps-btn">📍 View Location Map</a>
+            <!-- Updated location link for better mobile compatibility -->
+            <a href="https://maps.google.com/?q=Crowne+Plaza+-+Mirage+Hotel,+Smouha,+Alexandria" 
+               onclick="window.open(this.href, '_system'); return false;" 
+               target="_blank" 
+               class="maps-btn">
+               📍 View Location Map
+            </a>
             <div class="navigation-hint">Swipe Up ⇅</div>
         </section>
 
-        <!-- SLIDE 5: COUNTDOWN (آخر صفحة) -->
         <section class="slide" id="slide5">
             <h2 class="countdown-title">Days until the Wedding</h2>
             <div id="countdown">
@@ -381,13 +357,11 @@
     </div>
 
     <script>
-        // آلية توليد تساقط أوراق الورد الهادئة بالخلفية
         const petalsContainer = document.getElementById('petalsContainer');
         const petalCount = 18;
         
         for (let i = 0; i < petalCount; i++) {
             const petal = document.createElement('div');
-            const targetDate = new Date("August 26, 2026 19:00:00").getTime();
             petal.classList.add('petal');
             petal.style.left = Math.random() * 100 + 'vw';
             petal.style.width = Math.random() * 12 + 8 + 'px';
@@ -397,54 +371,41 @@
             petalsContainer.appendChild(petal);
         }
 
-        // أنيميشن فتح البوابات وتشغيل الموسيقى
         const openBtn = document.getElementById('openBtn');
         const mainContainer = document.getElementById('mainContainer');
         const bgMusic = document.getElementById('bgMusic');
 
         openBtn.addEventListener('click', () => {
             mainContainer.classList.add('opened');
-            
-            // تشغيل الموسيقى من الثانية 20 فوراً عند الفتح
             bgMusic.currentTime = 20; 
-            bgMusic.play().catch(error => {
-                console.log("Autoplay was prevented by browser policy, waiting for interaction.");
-            });
+            bgMusic.play().catch(error => { console.log("Autoplay prevented"); });
         });
 
-        // تشغيل العداد التنازلي للتاريخ
         const targetDate = new Date("August 26, 2026 19:00:00").getTime();
 
         setInterval(() => {
             const now = new Date().getTime();
             const difference = targetDate - now;
-
             if (difference <= 0) return;
-
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
             document.getElementById("days").innerText = days.toString().padStart(2, '0');
             document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
             document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
             document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
         }, 1000);
 
-        // التنقل والتحريك بالسحب (Swipe) للأجهزة الذكية
         let slides = document.querySelectorAll('.slide');
         let currentIdx = 0;
         let startY = 0;
 
         window.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
-
         window.addEventListener('touchend', (e) => {
             let endY = e.changedTouches[0].clientY;
             let swipeDistance = startY - endY;
-
             if (!mainContainer.classList.contains('opened')) return;
-
             if (swipeDistance > 50 && currentIdx < slides.length - 1) {
                 slides[currentIdx].classList.remove('current');
                 slides[currentIdx].classList.add('past');
