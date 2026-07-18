@@ -209,8 +209,8 @@
             z-index: 10;
         }
 
-        .slide.current { opacity: 1; transform: translateY(0); }
-        .slide.past { opacity: 0; transform: translateY(-30px); }
+        .slide.current { opacity: 1; transform: translateY(0); z-index: 20; }
+        .slide.past { opacity: 0; transform: translateY(-30px); z-index: 10; }
 
         .countdown-title {
             font-family: var(--font-serif);
@@ -269,21 +269,26 @@
             border-radius: 4px;
             transition: all 0.3s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 999;
+            cursor: pointer;
         }
         .maps-btn:hover { background-color: var(--accent-gold); }
 
         .navigation-hint { 
             position: absolute; 
-            bottom: 4rem; 
+            bottom: 2.5rem; 
             font-family: var(--font-serif); 
             font-size: 1rem; 
             font-weight: 600;
             letter-spacing: 4px; 
             text-transform: uppercase; 
-            opacity: 0.75; 
+            opacity: 0.85; 
             color: var(--text-brown);
             text-shadow: 0 2px 4px rgba(251, 249, 244, 0.8);
-            animation: bounce 2s infinite; 
+            animation: bounce 2s infinite;
+            z-index: 40;
+            pointer-events: none;
         }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
     </style>
@@ -338,8 +343,9 @@
                 <div class="detail-item"><strong>Time</strong>07:00 PM</div>
                 <div class="detail-item"><strong>Venue</strong>Crowne Plaza - Mirage Hotel</div>
             </div>
-            <!-- Standard dynamic deep-link config for multi-platform browsers -->
-            <a href="https://maps.app.goo.gl/2KGKj1LV5GBDCDHSA" 
+            <!-- Added id="mapLink" so JS can securely protect its click from being stolen by the swipe logic -->
+            <a id="mapLink" 
+               href="https://www.google.com/maps/search/?api=1&query=Crowne+Plaza+Alexandria+Horizon+Smouha" 
                target="_blank" 
                rel="noopener noreferrer"
                class="maps-btn">
@@ -405,6 +411,13 @@
         let slides = document.querySelectorAll('.slide');
         let currentIdx = 0;
         let startY = 0;
+
+        // Prevent swiping interference specifically for the map link button
+        const mapLink = document.getElementById('mapLink');
+        if(mapLink) {
+            mapLink.addEventListener('touchstart', (e) => { e.stopPropagation(); }, {passive: true});
+            mapLink.addEventListener('touchend', (e) => { e.stopPropagation(); }, {passive: true});
+        }
 
         window.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
         window.addEventListener('touchend', (e) => {
